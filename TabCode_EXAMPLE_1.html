@@ -6,6 +6,7 @@
   <link type="text/css" rel="stylesheet" href="css/render.css" />
   <script type="text/javascript" src="js/jquery-1.4.4.js"></script>
   <script type="text/javascript" src="js/tabcode.js"></script>
+
 </head>
 
 <body>
@@ -14,5 +15,15 @@
     <svg class="rendered" id="notation" width="900px" height="180px"></svg>
   </div>
 </body>
+
+<script type="text/javascript">
+  var my_tablature = "E.a2a3c5 Sc2 Ed2 Ea2 | Ed2";
+  var svg_element = document.getElementById('notation');
+  var tc; // what is this variable?
+  var hist = new History();
+  var params = new Parameters(false, tc, 'Q', ren_G, 'French', 'Varietie', hist);
+  tab_code_doc = new Tablature(my_tablature, svg_element, params);
+  tab_code_doc.draw();
+</script>
 
 </html>
