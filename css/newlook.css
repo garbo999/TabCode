@@ -1,0 +1,406 @@
+@font-face {
+font-family: 'Varietie3';
+src: url('varietie4-webfont.eot');
+src: local('☺'), url('varietie4-webfont.woff') format('woff'), url('varietie4-webfont.ttf') format('truetype'), url('varietie4-webfont.svg#webfontdMhCwbXf') format('svg');
+font-weight: normal;
+font-style: normal;
+}
+
+@font-face {
+font-family: 'TabRegular';
+src: url('tabfont-webfont.eot');
+src: local('☺'), url('tabfont-webfont.woff') format('woff'), url('tabfont-webfont.ttf') format('truetype'), url('tabfont-webfont.svg#webfontfr7Oup7E') format('svg');
+font-weight: normal;
+font-style: normal;
+}
+@font-face {
+    font-family: 'varietie3Rhythms';
+    src: url('varietie3-webfont.eot');
+    src: url('varietie3-webfont.eot?#iefix') format('embedded-opentype'),
+         url('varietie3-webfont.woff') format('woff'),
+         url('varietie3-webfont.ttf') format('truetype'),
+         url('varietie3-webfont.svg#varietie3') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'varietie3FretsAndOrns';
+    src: url('varietie-frets-orns-webfont.eot');
+    src: url('varietie-frets-orns-webfont.eot?#iefix') format('embedded-opentype'),
+         url('varietie-frets-orns-webfont.woff') format('woff'),
+         url('varietie-frets-orns-webfont.ttf') format('truetype'),
+         url('varietie-frets-orns-webfont.svg#varietie3') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Varietie3-ts';
+    src: url('varietie-ts-webfont.eot');
+    src: url('varietie-ts-webfont.eot?#iefix') format('embedded-opentype'),
+         url('varietie-ts-webfont.woff') format('woff'),
+         url('varietie-ts-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+  -webkit-touch-callout: none;
+}
+
+#banner{
+  width: 95%;
+  text-align: center;
+  margin: 9px;
+  font-family: serif;
+  font-weight: bold;
+  font-size: 180%;
+  color: #336;
+}
+
+.lute_pic_l{
+  float: left;
+  width: 20%;
+}
+.lute_pic_l img{
+  float: right;
+}
+.lute_pic_r{
+  float: right;
+  width: 20%;
+}
+.lute_pic_r img{
+  float: left;
+}
+.logo_centre{
+/*
+  padding-left: 25%;
+  padding-right: 25%;
+*/
+}
+
+#topstuff{
+  background-color: #EEE;
+  width: 90%;
+  padding: 3px;
+  margin: 6px;
+  border-radius: 8px 8px 8px 8px;
+  border: 1px solid #AAB;
+}
+
+#assignment, #user{
+  font-size: 110%;
+  margin: 3px;
+}
+.dates{
+  font-size: 80%;
+}
+#submitted span{
+  color: blue;
+}
+#unsubmitted {
+  color: red;
+}
+.navbutton{
+  font-weight: bold;
+  letter-spacing: -0.3em;
+}
+
+#changepwdbutton, #viewprevbutton, #logout, #help {
+  font-size: 60%;
+  color: #336;
+  padding-right: 4px;
+  padding-left: 4px
+}
+
+#user{
+  font-family: monospace;
+}
+
+.clear {
+  clear: both;
+  width: 100%;
+  overflow: auto;
+}
+
+.left {
+  float: left;
+  width: 35%;
+}
+.threequarterleft {
+  float: left;
+  width: 65%;
+}
+
+.quarterright {
+  width: 35%;
+  float: right;
+}
+.right {
+  width: 45%;
+  float: right;
+}
+.widerright {
+  width: 65%;
+  float: right;
+}
+
+#menubar, #settingsbar {
+  background-color: #EEE;
+  width: 90%;
+  padding: 3px;
+  margin: 6px;
+  border-radius: 8px 8px 0px 0px;
+  border: 1px solid #AAB;
+}
+
+#tempoReadOut {
+  display: inline-block;
+}
+
+#notation{
+  /* height: 220px; */
+}
+
+#assignmentbar {
+  background-color: #EEE;
+  width: 90%;
+  padding: 3px;
+  margin: 6px;
+  border-radius: 0px 0px 8px 8px;
+  border: 1px solid #AAB;
+}
+
+.editbutton, .leditbutton, .reditbutton, .tempoReadOut {
+  background-color: #EEE;
+  border: none;
+  cursor: pointer;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif;
+}
+a.editbutton, a.leditbutton, a.reditbutton{
+  text-decoration: none;
+}
+#tuning{
+  font-style: italic;
+}
+
+.editbutton:hover, .leditbutton:hover, .reditbutton:hover{
+  background-color: #DDF;
+}
+
+.reditbutton{
+  border-right: 1px solid #AAB;
+}
+.leditbutton{
+  border-left: 1px solid #AAB;
+}
+
+#image, #editor{
+  margin-left: 9px;
+}
+
+#preview {
+  border: 1px solid black;
+/*  right: 15px;*/
+}
+#zoomed {
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+  border: 1px solid black;
+}
+/* LOGIN WINDOW */
+
+#login {
+  z-index: 101;
+  position: fixed;
+  left: 5px;
+/*  top: 5px; */
+  top: 118px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 5px;
+  border: 1px solid #AAB;
+  /* width: 100%; */
+  /* height: 100%; */
+  padding: 3em;
+  background-color: #EEE;
+}
+#login h1 {
+  font-family: sans-serif;
+  font-size: large;
+}
+#login input {
+  font-family: sans-serif;
+  font-size: medium;
+  margin: 9px 0px 15px;
+}
+#login div {
+  border: none;
+  min-height: 1.5em;
+}
+
+/* Save status lamp */
+.lamp {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  border: none;
+  height: 10px;
+  width: 10px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;  
+}
+.lampsaved {
+    background: #40d32a; 
+    background: -moz-radial-gradient(center, ellipse cover, #40d32a 0%, #207215 100%);
+    background: -webkit-radial-gradient(center, ellipse cover, #40d32a 0%,#207215 100%);
+    background: -o-radial-gradient(center, ellipse cover, #40d32a 0%,#207215 100%); 
+    background: -ms-radial-gradient(center, ellipse cover, #40d32a 0%,#207215 100%);
+    background: radial-gradient(center, ellipse cover, #40d32a 0%,#207215 100%);
+}
+.lampunsaved {
+    background: #FF0000;
+    background: -moz-radial-gradient(center, ellipse cover, #FF0000 0%, #BF0000 100%);
+    background: -webkit-radial-gradient(center, ellipse cover, #FF0000 0%,#BF0000 100%);
+    background: -o-radial-gradient(center, ellipse cover, #FF0000 0%,#BF0000 100%); 
+    background: -ms-radial-gradient(center, ellipse cover, #FF0000 0%,#BF0000 100%);
+    background: radial-gradient(center, ellipse cover, #FF0000 0%,#BF0000 100%);
+}
+
+/* tcdiv */
+
+#tcspan {
+  border-radius: 5px;
+  border: 1px solid #AAB;
+  padding: 3em;
+  background-color: #EEE;
+}
+embed{
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  height: 5px;
+  width: 5px;
+}
+
+.searchResult{
+  padding: 3px;
+  border-bottom: 1px solid #CCE;
+  cursor: pointer;
+}
+.pieceTitle{
+  font-size: 110%;
+}
+.sourceTitle{
+  font-style: italic;
+  padding: 0.3em;
+}
+.Shelfmark{
+  padding: 0.5em;
+}
+#resultTab{
+  position: absolute;
+  font-size: 70%;
+  right: 4px;
+  top: 200px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.searchResults{
+  width: calc(100% - 650px);
+  padding: 2px;
+}
+.selected {
+  fill: #000033;
+}
+.selected.flag {
+  fill: #000033;
+}
+.select-0 {
+  fill: #0077FF;
+}
+.select-1 {
+  fill: #00FF77;
+}
+.searchResult.clicked, .searchResult.clicked:hover {
+  font-size: 110%;
+  background-color: #EEF;
+  cursor: default;
+}
+.searchResult:hover {
+  background-color: #ABF;
+}
+.metadata{
+  cursor: pointer;
+}
+.playback.control{
+  top: 5px;
+  left: 5px;
+  position: absolute;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0;
+}
+.playback.control.stop{
+  height:24px;
+  width: 24px;
+  background: url("Player_stop.png");
+  background-size: 24px 24px;
+}
+.playback.control.start{
+  height:24px;
+  width: 24px;
+  background: url("Player_play.png");
+  background-size: 24px 24px;
+}
+.notation{
+  position: relative;
+}
+.searchResults, #resulttab{
+  overflow: scroll;
+  border: 1px solid #BBD;
+  display: none;
+  border-radius: 4px;
+}
+
+body {
+  height: 100%;
+}
+.resultAnchor {
+  text-decoration: none;
+  padding: 0 3px;
+  color: 666;
+}
+.resultAnchor:hover {
+  text-decoration: underline;
+}
+.resultStats {
+  padding: 0 3px;
+}
+.result-ribbon {
+  border: 1px solid #666;
+  position: relative;
+  width: 200px;
+  height: 20px;
+}
+.result-block {
+  position: absolute;
+  height: 100%;
+  border: none;
+  background-color: #060;
+}
+.result-block.p0 {
+  background-color: #000;
+}
+.result-block.p1, .result-block.p2, .result-block.p-1, .result-block.p-2 {
+  background-color: #630;
+}
+.result-block.p3, .result-block.p4, .result-block.p-3, .result-block.p-4 {
+  background-color: #306;
+}
+
+#content div#notation-div div{
+  border: none;
+}
+#content div#notation-div {
+  border: none;
+  position: relative;
+}

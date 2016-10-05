@@ -1,0 +1,348 @@
+/* Pointy-clicky stuff */
+
+.uibutton{
+  background-color: #FFFFFF;
+  padding: 6px;
+  border: 2px solid #DDD;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.uibutton.selected{
+  border: 2pt solid #224;
+  background-color: #DDF
+}
+.uibutton:hover{
+  border: 2pt solid #69A;
+}
+div.buttons {
+  padding: 2px;
+  border: none;
+}
+#debug{
+  position: fixed;
+  top: 0px;
+  right: 0px;
+}
+#buttonbox{
+  background-color: white;
+  z-index: 12;
+  position: absolute;
+  border: 2px solid #AAB;
+  border-radius: 2px;
+  padding: 3px;
+  border-collapse: collapse;
+}
+#messages{
+  clear: both;
+  width: 100%;
+  padding: 5px;
+}
+.buttonrow{
+  display: table-row;
+  border: none;
+}
+.buttonrow.extrarow{
+  display: block;
+  padding: 5px;
+}
+.buttoncell{
+  display: table-cell;
+  border: none;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+}
+.buttoncell span{
+  padding: 0;
+  margin: 0;
+}
+
+/* Are these used? Yes -- in beaming dialogue*/
+.beams, .beamdotrow {
+  padding: 0px;
+  margin: 0px;
+  /* border-collapse: collapse; */
+  border-spacing: 0px;
+  empty-cells: show;
+}
+
+.beams td, .beamdotrow td{
+  height: 6px;
+  min-width: 14px;
+  background-color: #FFF;
+  empty-cells: show;
+}
+
+.beamdotrow td{
+  min-height: 14px;
+}
+
+.beam{
+  padding-top: 12px;
+  margin: 0px;
+}
+
+.beamed{
+  border-top: 6px solid #000;
+  padding-top: 6px;
+}
+
+.r{
+  border-left: 1px solid #000;
+}
+
+.l{
+  border-right: 1px solid #000;
+}
+
+.nobars td, .padding{
+  border: 0px solid #FFF;
+}
+/* .chord.playing { */
+/*   /\* stroke: #FC3; *\/ */
+/*   stroke: #F60; */
+/*   stroke-opacity: 0.6; */
+/*   stroke-width: 3; */
+/* } */
+.chord.playing .bassslash {
+  stroke-width: 1;
+  stroke-opacity: 1;
+  stroke: #F60;
+}
+.chord.playing .bassnote, .chord.playing .tabnote, .chord.playing .flag {
+  fill: #F60;
+}
+.beam:hover{
+    background-color: #DD7777;
+}
+
+.beams td.current {
+  background-color: #DDF;
+}
+
+.beamdotrow td.dot {
+  cursor: pointer;
+}
+
+.beamdotrow td.dotted span:after {
+  padding-left: 0.5ex;
+  content: "•";
+  font-family: varietie3FretsAndOrns;
+}
+.bassgroup .bass.number{
+  font-family:TabRegular;
+}
+
+/* These are... */
+
+line, .staffline, .beamelement {
+  stroke: black;
+  stroke-linecap: butt;
+}
+
+.lbeamelement, .rbeamelement {
+  stroke-width: 3;
+}
+
+.rhythmdot{
+  font-family: Varietie3;
+  white-space: pre;
+  /* font-size: 200%; */
+}
+
+.Italian, .fdots, .numbered{
+  font-family: helvetica; 
+  white-space: pre;
+}
+.bebungi {
+  font-family: arial, helvetica; 
+  white-space: pre;
+}
+
+.flag {
+  font-family: varietie3Rhythms;
+  white-space: pre;
+}
+.baroque .flag, .flag.TabFont, .tabnote.TabFont, .bassnote.TabFont {
+  font-family:TabRegular;
+}
+.French, .symbol, .mordent,  .bebungii, .rhythmdot{
+  font-family: varietie3FretsAndOrns;
+  white-space: pre;
+}
+.martellement {
+  font-family: varietie3FretsAndOrns;
+  white-space: pre;
+  font-size: 120%;
+}
+.tsc, .tsd, .tso{
+  font-family: Varietie3-ts;
+  white-space: pre;
+}
+.textbutton.meter{
+  font-family: Varietie3-ts;
+}
+.reverse {
+  display: inline-block;
+  -moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ie-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+.reading{
+  fill-opacity: 0;
+  stroke-dasharray: 5,5;
+}
+.reading.clear{
+  fill: none;
+}
+.reading, .switchTab, .redReading {
+  stroke-width: 2px;
+  stroke: #D48;
+}
+.switchTab.blueReading {
+  fill: #AAF;
+}
+.switchTab.greenReading {
+  fill: #AFA;
+}
+.switchTab.redReading {
+  fill: #FAA;
+}
+.switchTab:hover {
+  fill-opacity: 0.5;
+  cursor: pointer;
+  stroke-width: 3px;
+}
+.blueReading {
+  stroke: #48D;
+}
+.greenReading {
+  stroke: #4D8;
+}
+.editTab{
+  stroke-dasharray: 1,1;
+  fill-opacity: 0.7;
+}
+.reading:hover {
+  stroke-width: 2px;
+  stroke: #BBB;
+  fill: none;
+}
+.missingFret, .missingChord, .missingFlag, .missingTSC {
+  stroke-width: 0;
+  fill: none;
+  pointer-events: all;
+}
+.missingFret:hover, .missingFlag:hover, .missingTSC:hover {
+  stroke-width: 2px;
+  stroke: #D48;
+}
+.missingChord:hover {
+  stroke-width: 2px;
+  stroke: #BAA;
+}
+.tso {
+  padding-left: 0.4em;
+}
+
+.French.Tabfont, .flag.Tabfont, .symbol.Tabfont, .mordent.Tabfont, .bebungi.Tabfont, .bebungii.Tabfont {
+  font-family: TabRegular;
+}
+
+.lone {
+  font-size: 190%;
+}
+
+.stacked {
+  font-size: 160%;
+}
+.stacked.tstext {
+  font-size: 240%;
+}
+.lone.tstext {
+  font-size: 280%;
+}
+
+.tsslash {
+  fill: none;
+  stroke: black;
+  stroke-width: 3;
+}
+
+.forefall{
+  fill: none;
+  stroke: black;
+  stroke-width: 2;
+}
+
+.startenuto, .bebungi{
+  font-size: 135%;
+}
+
+.flag:hover, .tabnote:hover, .bassgroup:hover, .extra:hover{
+  fill: #AA0044;
+  font-weight: bold;
+  cursor: pointer;
+}
+.beamelement:hover, .beamelement:hover *{
+  cursor: pointer;
+  stroke: #AA0044;
+  fill: #AA0044;
+  stroke-width: 3.5;
+}
+.tscomponent {
+  pointer-events: stroke;
+}
+.tscomponent * {
+  pointer-events: stroke;
+}
+.tscomponent:hover *{
+  fill: #AA0044;
+  cursor: pointer;
+}
+.barlineline, .barlinedots, .repeatdot {
+  stroke-width: 1.1;
+}
+
+.barline *{
+  fill: #000000;
+  stroke: #000000;
+  stroke-width: 1.1; 
+}
+
+.pieceBreak .barlineline, .pieceBreak .barlinedots {
+  stroke: #068;
+  fill: #068;
+}
+
+.tscomponent:hover .tsslash, .pieceBreak:hover .barlinedots, .barline:hover * {
+  stroke: #AA0044;
+  stroke-width: 4.5;
+}
+
+#contextflag {
+  fill: #881100;
+  font-size: 60%;
+}
+.tabnote.space {
+  fill: #444444;
+}
+.pagePreview{
+  position: absolute;
+  top: 10px;
+  left: 5%;
+  right: 5%;
+  border: 2px dotted #CCE;
+  z-index: 35;
+  background-color: white;
+  padding: 10px;
+}
+.pagePreview h3 {
+  text-align: center;
+}
+.fullpage {
+  font-size: 75%;
+  margin: 0 5%;
+}
