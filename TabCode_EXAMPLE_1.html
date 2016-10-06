@@ -2,28 +2,42 @@
 <html>
 
 <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>Simple TabCode example 1</title>
   <link type="text/css" rel="stylesheet" href="css/newlook.css" />
   <link type="text/css" rel="stylesheet" href="css/render.css" />
   <script type="text/javascript" src="js/jquery-1.4.4.js"></script>
   <script type="text/javascript" src="js/tabcode.js"></script>
-
 </head>
 
 <body>
   <div id="main">
     <h1>Simple TabCode example 1</h1>
+    <p>Static TabCode (defined in HTML file)</p>
     <svg class="rendered" id="notation" width="900px" height="180px"></svg>
+    <p>(from "Mr. Dowland's Midnight" by John Dowland)</p>
   </div>
 </body>
 
 <script type="text/javascript">
-  var my_tablature = "E.a2a3c5 Sc2 Ed2 Ea2 | Ed2";
+  // Define tablature in TabCode
+  var my_tabcode_tablature = "M(C/) \
+    E.a2a3c5 Sc2 Ed2 Ea2 Ed2a3c5 Ea1 Ec2a3 Eb5 | \
+    E.a2a3c5 Sc2 Ed2 Ec2a5 Ed2b3d6 Ea1 Qc1c2e3c6 :|";
+
+  // Initialise variables
   var svg_element = document.getElementById('notation');
   var tc; // what is this variable?
-  var hist = new History();
+  var hist = new History(); // is this necessary if no editor?
+
+  // Parameters (with two alternatives)
   var params = new Parameters(false, tc, 'Q', ren_G, 'French', 'Varietie', hist);
-  tab_code_doc = new Tablature(my_tablature, svg_element, params);
-  tab_code_doc.draw();
+  //var params = new Parameters(false, tc, 'Q', ren_G, 'French', 'Tabfont', hist);
+  //var params = new Parameters(false, tc, 'Q', ren_G, 'Italian', 'Italian', hist);
+
+  // Create and draw the SVG image
+  tabcode_doc = new Tablature(my_tabcode_tablature, svg_element, params);
+  tabcode_doc.draw();
 </script>
 
 </html>
