@@ -758,6 +758,1073 @@ function svgImage(svgEl, href, x, y, height, width){
   if(svgEl) svgEl.appendChild(el);
   return el;
 }
+//var curParams;
+var blockassignmentsdiv = true;
+function basicwidth(){
+  return 950;
+//  return Math.max(parseInt(TabCodeDocument.SVG.style.width), 700);
+}
+function parseTCDoc(TC){
+  curBeams = 0;
+  if(TabCodeDocument){
+    TabCodeDocument = new Tablature(TC, node ? false : document.getElementById('notation'), 
+      curParams);
+  } else {
+    TabCodeDocument = new Tablature(TC, node ? false : document.getElementById('notation'), 
+      curParams);
+  }
+  TabCodeDocument.draw();
+  updatePage();
+}
+function updatePage(){
+  if(node) return;
+  // document.getElementById("background").style.width = TabCodeDocument.SVG.style.width;
+  if(document.getElementById("banner")){
+    var w = basicwidth();
+    document.getElementById("banner").style.width = w;
+//    document.getElementById("systemimage").style.width = w;
+    if(document.getElementById("topstuff")) document.getElementById("topstuff").style.width = w;
+    if(document.getElementById("menubar")) document.getElementById("menubar").style.width = w;
+    if(document.getElementById("settingsbar")) document.getElementById("settingsbar").style.width = w;
+    if(document.getElementById("assignmentbar")) document.getElementById("assignmentbar").style.width = w;
+    if(prevdiv) prevdiv.style.marginLeft = w - parseInt(prevdiv.style.width);
+  }
+  document.getElementById("rendered").style.width = basicwidth();
+//  TabCodeDocument.makeMidi();
+  if(editable){
+    $(".editable .flag.rhythm").click(function(e){ 
+                              rhythmFlagSelector(e.pageX, e.pageY, $(this).data("word"));
+                              return false;});
+    $("#contextflag").click(function(e){ 
+                              buttonBox(contextButtonSet(0,0,$(this).data("word")), e.pageX, e.pageY, []);
+                              return false;});
+    $(".editable .tabnote.French").click(function(e){ 
+                                 var word = $(this).data("word");
+                                 frenchTabSelector(e.pageX, e.pageY, word);
+                                 return false;
+                               });
+    $(".editable .tabnote.Italian").click(function(e){ 
+                                  var word = $(this).data("word");
+                                  italianTabSelector(e.pageX, e.pageY, word);
+                                  return false;
+                                });
+    $(".pieceBreak").click(function(e){
+                             var word = $(this).data("word");
+                             breakSelector(e.pageX, e.pageY, word);
+                             return false;
+                           });
+    $(".editable .fingering, .editable .orn").click(function(e){
+        var word = $(this).data("word");
+        var orns = new ornamentbox(word);
+        orns.draw(e.pageX, e.pageY);
+      });
+    $(".barline").click(function(e){
+      var word = $(this).data("word");
+          buttonBox(barlineButtonSet(0,0,$(this).data("word")),
+          e.pageX, e.pageY, [deleteButton(0,0,word.starts, word.finishes, "barline")]);
+      });
+    $(".missingFret").click(function(e){
+        var word = $(this).data("word");
+        var course = $(this).data("course");
+        var ins = word.insertionPoint(course);
+        buttonBox(TabCodeDocument.parameters.tabType == "Italian"
+                 ? italianTabSet([course, ins, false, false])
+                 : frenchTabSet([course, ins, false, false]),
+                e.pageX, e.pageY, []);
+        });
+    $(".missingFlag").click(function(e){
+      var word = $(this).data("word");
+      var ins = word.starts;
+      buttonBox(rhythmButtonSet(0, 0, [ins, false, false]),e.pageX, e.pageY, []);
+    });
+    $(".missingChord").click(function(e){
+      var prec = $(this).data("precedes");
+      var ins = TabCodeDocument.code.length;// -1;
+      if(prec<TabCodeDocument.TabWords.length){
+        if(prec<TabCodeDocument.TabWords.length-1 && TabCodeDocument.TabWords[prec].tType==="Comment"){
+          ins = TabCodeDocument.TabWords[prec+1].starts;
+        } else if (prec==TabCodeDocument.TabWords.length-1 
+                   && TabCodeDocument.TabWords[prec].tType==="Comment"){
+          ins = TabCodeDocument.TabWords[prec].finishes + 1;
+        } else {
+          ins = TabCodeDocument.TabWords[prec].starts;          
+        }
+      } else {
+        ins = TabCodeDocument.code.length;
+      }
+      var pos = $(this).data("pos");
+      insertionButtons(TabCodeDocument.parameters.tabType, ins, pos,
+        e.pageX, e.pageY);
+      });
+    $(".tscomponent").click(function(e){
+      var word = $(this).data("word");
+      var i = $(this).data("i");
+      var j = $(this).data("j");
+      metricalModButtonBox(word, i, j, e.pageX, e.pageY);
+    });
+    $(".missingTSC.above").click(function(e){
+      var word = $(this).data("word");
+      var i = $(this).data("i");
+      metricalInsButtonBox(word, i, 0, "above", e.pageX, e.pageY);
+    });
+    $(".missingTSC.below").click(function(e){
+      var word = $(this).data("word");
+      var i = $(this).data("i");
+      metricalInsButtonBox(word, i, 0, "below", e.pageX, e.pageY);
+    });
+    $(".missingTSC.before").click(function(e){
+      var word = $(this).data("word");
+      var i = $(this).data("i");
+      metricalInsButtonBox(word, i, 0, "before", e.pageX, e.pageY);
+    });
+    $(".missingTSC.after").click(function(e){
+      var word = $(this).data("word");
+      var i = $(this).data("i");
+      metricalInsButtonBox(word, i, 0, "after", e.pageX, e.pageY);
+    });
+    $(".beamelement").click(function(e){
+      var word = $(this).data("word");
+      var beamgroup = word.beamGroup;
+      beamTable(e.pageX, e.pageY, beamgroup);
+    });
+  }
+}
+
+function refresh() {
+  if(TabCodeDocument){
+    $(TabCodeDocument.SVG).empty();
+  }
+  if(document.getElementById('code') && document.getElementById('code').value.trim().length){
+    parseTCDoc(document.getElementById('code').value);
+    if(curUser){
+      dbSynchronise();
+    }
+  }
+//  parseTCDoc(document.getElementById('code').value);
+}
+
+function nextPage() {
+	if (nextpage) window.location.href = nextpage+"&browse=1"; 
+}
+
+function prevPage() {
+	if (prevpage) window.location.href = prevpage+"&browse=1";
+}
+
+function newInitialisePage(example){
+  // FIXME: This is just for now...
+  $(document.getElementById('tcspan')).hide();
+  $(document.getElementById('pchange')).hide();
+  $(document.getElementById('hideprevbutton')).hide();
+  $(document.getElementById('browse')).hide();
+  window.onbeforeunload = function(){
+    if(resync){
+      return "Not all your changes have been saved. "
+             + "Press 'Cancel' to return to the page and wait or "
+             + "'Ok' to continue. Clicking Ok may mean you have "
+             + "to redo some or all of your editing next time you log in.";
+    }
+    return undefined;
+  };
+  curParams = GETParameters();
+  if(!curParams){
+    if(typeof(curUser)=='undefined' || !curUser) {
+      logIn();
+    } else {
+      $("#assignmentsdiv").hide();
+    }
+  }
+  if(curParams){
+    initialisePage2();
+  }  
+}
+
+function initialisePage(example){
+  // FIXME: This is just for now...
+  $(document.getElementById('tcspan')).hide();
+  $(document.getElementById('pchange')).hide();
+  curParams = GETParameters();
+  if(!curParams){
+    if(typeof(curUser)=='undefined' || !curUser) {
+      logIn();
+    } else {
+      $("#assignmentsdiv").hide();
+    }
+  }
+  if(curParams){
+    initialisePage2();
+  }
+}
+
+function initialisePage2(){
+  if(node) return parseTCDoc(curParams.tabcode);;
+  document.getElementById("code").value = curParams.tabcode;
+  if(document.getElementById("systemimage")) document.getElementById("systemimage").src = curParams.imageURL;
+  if(document.getElementById('preview')){
+    var base = basepathname(curParams.imageURL);
+    var face = facename(curParams.imageURL);
+    previewinit(base+"/"+face+"_thumb.gif", base+"/"+face+".png", base+"/"+face+".staffs");
+//    pageimg.src = base+"/"+face+".png";
+//    document.getElementById('thumb').src = base+"/"+face+"_thumb.gif";
+    // previmg.onload = function(){
+    //   prevdiv.style.width=previmg.width;
+    //   prevdiv.style.height=previmg.height;
+    //   prevcan.style.width = previmg.width;
+    //   prevcan.style.height = previmg.height;
+    //   if(TabCodeDocument){
+    //     prevdiv.style.marginLeft = basicwidth() - parseInt(prevdiv.style.width);
+    //   }
+    // };
+  }
+  //    document.getElementById("systemimage").height = 180;  
+  if(document.getElementById("systemimage")) document.getElementById("systemimage").width = 900;
+  if(document.getElementById(curParams.fontName)) document.getElementById(curParams.fontName).checked=true;
+  if(document.getElementById(curParams.tabType)) document.getElementById(curParams.tabType).checked=true;
+  parseTCDoc(curParams.tabcode);
+  if(!nextpage) {
+    $("#nextP").attr("disabled", true);
+  }
+  if(!prevpage)  {
+    $("#prevP").attr("disabled", true);
+  }  
+}
+
+function italianTabSelector(x, y, note){
+  var set = italianTabSet(note);
+  if(!note.extras) note.extras=[];
+  var extras = [deleteButton(x, y, note.starts, note.starts+2+note.extras.length, "tabNote")];
+  extras.push(deleteChordButton(x, y, note.chord.starts, note.chord.finishes, note.chord));
+  extras.push(deleteToHereButton(x, y, TabCodeDocument.firstNonComment().starts, note.chord.finishes, note.chord));
+  var course = note.chord.mainCourses.indexOf(note);
+  var same;
+  if(course>0 && !note.chord.mainCourses[course-1]){
+    extras.push(ItUpCourse(note, course+1));
+    same = ItUpCourseKeepPitch(note, course+1);
+    if(same) extras.push(same); // Only if on fingerboard
+  }
+  if(course<5 && !note.chord.mainCourses[course+1]){
+    extras.push(ItDownCourse(note, course+1));
+    same = ItDownCourseKeepPitch(note, course+1);
+    if(same) extras.push(same); // Only if on fingerboard
+  }
+  extras.push(textButton("OrnFing","orndialogue", function(note, x, y){
+        return function() {
+          var orns = new ornamentbox(note);
+          orns.draw(x,y);
+        };
+      }(note, x, y), "Ornaments/Fingerings", false));
+//  genericSelector(set, x, y, extras);
+  buttonBox(set, x, y, extras);
+}
+
+function frenchTabSelector(x, y, note){
+  var set = frenchTabSet(note);
+  var extras = [deleteButton(x, y, note.starts, note.starts+2+note.extras.length, "tabNote")];
+  extras.push(deleteChordButton(x, y, note.chord.starts, note.chord.finishes, note.chord));
+  extras.push(deleteToHereButton(x, y, TabCodeDocument.firstNonComment().starts, note.chord.finishes, note.chord));
+  var course = note.chord.mainCourses.indexOf(note);
+  var same;
+  if(course>0 && !note.chord.mainCourses[course-1]){
+    extras.push(FrUpCourse(note, course+1));
+    same = FrUpCourseKeepPitch(note, course+1);
+    if(same) extras.push(same); // Only if on fingerboard
+  }
+  if(course<5 && !note.chord.mainCourses[course+1]){
+    extras.push(FrDownCourse(note, course+1));
+    same = FrDownCourseKeepPitch(note, course+1);
+    if(same) extras.push(same); // Only if on fingerboard
+  }
+  extras.push(textButton("OrnFing","orndialogue", function(note, x, y){
+        return function() {
+          var orns = new ornamentbox(note);
+          orns.draw(x,y);
+        };
+      }(note, x, y), "Ornaments/Fingerings", false));
+  //  genericSelector(set, x, y, extras);
+  buttonBox(set, x, y, extras);
+}
+
+function rhythmFlagSelector(x, y, chord, noBeams, noDelete){
+  var set = rhythmButtonSet(x, y, chord);
+  var extras = [];
+  if(!Array.isArray(chord) && chord.dotted){
+     //FIXME: Not robust
+    extras.push(undotButton(x, y, document.getElementById('code').value.indexOf(".", chord.starts)));
+  } else {
+    extras.push(dotButton(x, y, chord.starts+1));
+  }
+  if(!noDelete){
+    extras.push(deleteButton(x, y, chord.starts, chord.starts+((chord.dotted && 2)||1), "Flag"));
+    extras.push(deleteChordButton(x, y, chord.starts, chord.finishes, chord));
+    extras.push(deleteToHereButton(x, y, TabCodeDocument.firstNonComment().starts, chord.finishes, chord));
+  }
+  if(typeof(noBeams)=="undefined" || !noBeams){
+    extras.push(beamifyButton(x, y, chord));
+  }
+//  genericSelector(set, x, y, extras);
+  buttonBox(set, x, y, extras);
+}
+function tcShow(){
+  if(document.getElementById('tcspan')){
+    $(document.getElementById('tcspan')).show();
+    document.getElementById('tcspan').style.width=Math.max(parseInt(TabCodeDocument.SVG.style.width), 600)+'px';
+    $(document.getElementById('tcshow')).hide();
+  }
+}
+function tcHide(){
+  $(document.getElementById('tcspan')).hide(); 
+  $(document.getElementById('tcshow')).show();
+}
+function ShorthandExtra(character){
+	switch (character){
+	  case ",":
+		  return new backfall(1, 5);
+	  case "<":
+		  return new forefall2(4);
+	  case "#":
+      return new bebung1(7);
+	  case "x":
+      return new martellement(3);
+	  case "~":
+      return new bebung2(7);
+	  case "u":
+		  return new forefall1(7);
+	  case ":":
+      return new dotFingering(2, 7);
+	  case "!":
+      return new thumbLine(7);
+    case "*":
+      return new starTenuto(0);
+	  case "-":
+	  case '"':
+		  return false;
+    default:
+      return false;
+	};
+}
+
+function ParseFullExtra(code) {
+	var limit = code.length - 1;
+	var i=0;
+	if(i>limit){
+		return false;
+	}
+	var curchar = code.charAt(i);
+	if(curchar == "O"){
+		i++;
+		if(i>limit) return false;
+		curchar = code.charAt(i);
+		var type = curchar;
+		var subtype = 0; //default
+		var position = false;
+		i++;
+		if(i>limit) return false;
+		curchar = code.charAt(i);
+		if(curchar != ":" && curchar != ")"){
+			subtype = Number(curchar);
+			i++;
+			if(i>limit) return false;
+			curchar = code.charAt(i);
+		}
+		if(curchar == ":") {
+			i++;
+			if(i>limit) return getOrnament(type, subtype, false);
+			curchar = code.charAt(i);
+			if(Number(curchar))
+				position = Number(curchar);
+		}
+		return getOrnament(type, subtype, position);
+	} else if(curchar == "F") {
+		var finger = false;
+		var position = false;
+    var hand = false;
+    var obj;
+		i++;
+		if(i>limit) return false;
+		curchar = code.charAt(i);
+		if(curchar == "l" || curchar == "r"){
+			// could keep this info, but it makes no difference to
+			// display
+      hand = curchar;
+			i++;
+			if(i>limit) return false;
+			curchar = code.charAt(i);
+		}
+		if(curchar == "."){
+			// dot is a special case
+			finger = 0;
+			while (curchar == "."){
+				finger++;
+				i++;
+				if(i>limit) return new dotFingering(finger, 7);
+				curchar = code.charAt(i);
+			}
+			obj = new dotFingering(finger, 7);
+		} else if(curchar == "1" || curchar == "2" ||
+				  curchar == "3" || curchar == "4") {
+			obj = new numberFingering(curchar, 3);
+		} else {
+			obj = new symbolFingering(curchar, 7);
+		}
+    if(hand) obj.hand = hand;
+    return obj;
+	}
+	return false;
+}
+
+function dotFingering(count, position) {
+  // FIXME: Crazy constants, magic numbers
+	this.count = count;
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Fingering";
+  this.type = "dotFingering";
+  this.hand = "r";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else if (this.tType == "Italian"){
+      return (this.count-1) * -2 + 2.5;
+    } else {
+      return (this.count-1) * -3.5 + 2.5;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else if (this.tType == "Italian"){
+      return 6;
+    } else {
+      return 8;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType && this.type===o2.type
+      && this.count===o2.count 
+      && this.position===o2.position;
+  };
+  this.textString = function(){
+    return new Array(this.count+1).join(".");
+  };
+  this.htmlObj = function(){
+    return DOMDiv("fingering fdots", "fdotselector", this.textString());
+  };
+  this.TCString = function(){
+    switch(this.count) {
+      case 1:
+        if(this.hand == "r" && this.position == 7){
+          return ".";
+        } else {
+          return "(F"+this.hand+".:"+this.position+")";
+        }
+      case 2:
+        if(this.hand == "r" && this.position == 7){
+          return ":";
+        } else {
+          return "(F"+this.hand+"..:"+this.position+")";
+        }
+      default:
+        return "(F"+this.hand+this.textString()+":"+this.position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note) {
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos + this.dx(), ypos+this.dy(), "extra fingering fdots", 
+        false, false, this.textString());
+    $(el).data("word", note);
+	};
+}
+
+function numberFingering(number, position) {
+	this.number = number;
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Fingering";
+  this.type = "numberFingering";
+  this.hand = "l";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else if (this.tType == "Italian"){
+      return 9;
+    } else {
+      return 7;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else if (this.tType == "Italian"){
+      return -9;
+    } else {
+      return -6;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType && this.type===o2.type
+      && this.count===o2.count 
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("fingering numbered", "fnumselector", this.number);
+  };
+  this.TCString = function(){
+    return "(F"+this.hand+this.number+":"+this.position+")";
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos-this.dy(), 
+      "extra fingering numbered", false, false, this.number);
+    $(el).data("word", note);
+	};
+}
+
+function symbolFingering(symbol, position) {
+  // FIXME: This is nonsense
+	this.symbol = symbol;
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Fingering";
+  this.type = "symbolFingering";
+  this.hand = "r";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    return 0;
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return 5;
+    } 
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType 
+      && this.symbol===o2.symbol
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("extra fingering symbol "+this.hand, "fsymbolselector", this.symbol);
+  };
+  this.TCString = function(){
+    return "(F"+this.hand+this.symbol+":"+this.position+")";
+  };
+	this.draw = function(xpos, ypos, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos, ypos+5, "extra fingering symbol", false, false, this.symbol);
+    $(el).data("word", note);
+	};
+}
+
+function getOrnament(type, subtype, position){
+	switch(type){
+	case "a":
+		return new backfall(Number(subtype), position);
+		break;
+	case "c":
+		if(subtype=="2")
+			return new forefall2(position);
+		else
+			return new forefall1(position);
+		break;
+	case "d":
+		return new etoufment(position);
+		break;
+	case "e":
+		return new bebung1(position);
+		break;
+	case "f":
+		return new mordent(position);
+	};
+	return false;
+}
+
+function backfall(count, position){
+	this.count = count;
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "backfall";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return 10;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    return 0;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("orn backfall", "ornselector",")");
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType && this.type===o2.type
+      && this.count===o2.count 
+      && this.position===o2.position;
+  };
+  this.TCString = function(){
+    if(this.position == 5) {
+      return ",";
+    } else {
+      //FIXME: not true
+      return "(Oa"+this.count+":"+this.position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note) {
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos+this.dy(), "extra orn backfall", false, false, new Array(1+this.count).join(")"));
+    $(el).data("word", note);
+    return xpos+this.dx() + el.getBBox().width;
+	};
+}
+
+function forefall1(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "forefall1";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    return 0;
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return ld/5;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType && this.type===o2.type
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("orn textforefall", "ornselector","˘");
+  };
+  this.TCString = function(){
+    if(this.position == 7) {
+      return "u";
+    } else {
+      return "(Oc1:"+this.position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgPath(svgel, 
+      ["M "+xpos+","+(ypos+this.dy())+" A 6, 5, 0, 0, 0, "
+          + (xpos+ld/1.8)+","+(ypos+this.dy())]
+      ,"extra orn forefall", false);
+    $(el).data("word", note);
+    return xpos+ld/1.8;
+	};
+}
+
+function forefall2(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "forefall2";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return -5;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return 0;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType && this.type===o2.type
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textforefallii", "ornselector", "(");
+  };
+  this.TCString = function(){
+    if(position == "4"){
+      return "<";
+    } else {
+      return "(Oc2:"+position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos+this.dy(), 
+      "extra orn forefallii", false, false, "(");
+    $(el).data("word", note);
+    return xpos+this.dx() + el.getBBox().width;
+	};
+}
+
+function etoufment(position){
+	this.position = position;
+  this.nullfret = false;  
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "etoufment";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return ld/3;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return -ld/3;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType && this.type===o2.type
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textetoufment", "ornselector", "//");
+  };
+  this.TCString = function(){
+    return "(Od:"+position+")";
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var step = ld/3;
+    var el = svgLine(svgel, xpos+this.dx(), ypos+this.dy, 
+      xpos+this.dx()+step, ypos+this.dy()+2*step, 
+      "extra orn etoufment", false);
+    $(el).data("word", note);
+    return xpos+this.dx() + el.getBBox().width;
+	};
+}
+
+function bebung1(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "bebung1";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return -ld/5;
+    } else {
+      return 2 * ld/3;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return ld/6;
+    } else {
+      return -ld/2;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType 
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textbebung", "ornselector", "#");
+  };
+  this.TCString = function(){
+    if((!this.nullfret && this.position == "3") || 
+        (this.nullfret && this.position == 0)){
+      return "#";
+    } else {
+      return "(Oe:"+position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos+this.dy(), 
+      "extra orn bebungi", false, false, "#");
+    $(el).data("word", note);
+    return xpos+this.dx()+el.getBBox().width;
+	};
+}
+
+function starTenuto(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "starTenuto";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return -ld/30;
+    } else {
+      return -ld/30;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return ld/4;
+    } else {
+      return ld/4;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType 
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textstartenuto", "ornselector", "*");
+  };
+  this.TCString = function(){
+    if(this.position == 0){
+      return "*";
+    } else {
+      //FIXME
+      return "(O*:"+position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos+this.dy(), 
+      "extra orn startenuto", false, false, "*");
+    $(el).data("word", note);
+    return xpos+this.dx()+el.getBBox().width;
+	};
+}
+
+function martellement(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "martellement";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return 2*ld/3;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      // HACKHACK
+      if(this.tType == "Italian"){
+        return -ld/2;
+      } else {
+      // return -2*ld/3;
+        return 0;
+      }
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType 
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textmartellement martellement", "ornselector", "x");
+  };
+  this.TCString = function(){
+    if((!this.nullfret && this.position==3) 
+      || (this.nullfret && this.position==0)){
+      return "x";
+    } else {
+      return "(Of:"+position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos+this.dy(), 
+      "extra orn martellement", false, false, "*");
+    $(el).data("word", note);
+    return xpos+this.dx()+el.getBBox().width;
+	};
+}
+
+function mordent(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "mordent";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return 2*ld/3;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return 2*ld/3;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType 
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textmordent mordent", "ornselector", "x");
+  };
+  this.TCString = function(){
+    return "(Og:"+position+")";
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos+this.dy(), 
+      "extra orn mordent", false, false, "x");
+    $(el).data("word", note);
+    return xpos+this.dx()+el.getBBox().width;
+	};
+}
+
+function bebung2(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Ornament";
+  this.type = "bebung2";
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return ld/3;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return ld/3;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType 
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textbebungii bebungii", "ornselector", "~");
+  };
+  this.TCString = function(){
+    if(position==3){
+      return "~";
+    }else {
+      return "(Oh:"+position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note){
+    this.tType = curTabType;
+    var el = svgText(svgel, xpos+this.dx(), ypos+this.dy(), 
+      "extra orn bebungii", false, false, "~");
+    $(el).data("word", note);
+    return xpos+this.dx()+el.getBBox().width;
+	};
+}
+
+function thumbLine(position){
+	this.position = position;
+  this.nullfret = false;
+  this.tType = false;
+  this.eType = "Fingering";
+  this.type = "thumbLine";
+  this.hand = "r";
+  // FIXME: Isn't this a fingering??
+  this.dx = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else {
+      return 3*ld/10;
+    }
+  };
+  this.dy = function (){
+    // FIXME: ignoring this.position
+    if(this.nullfret) {
+      return 0;
+    } else if (this.tType == "Italian"){
+      return 2*ld/5;
+    } else {
+      return 3*ld/4;
+    }
+  };
+  this.eq = function(o2){
+    return this.eType===o2.eType 
+      && this.position===o2.position;
+  };
+  this.htmlObj = function(){
+    return DOMDiv("ornament textthumbline", "ornselector", "|");
+  };
+  this.TCString = function(){
+    if(position==7){
+      return "!";
+    }else {
+      return "(F"+(this.hand=="r" ? "" : "l")+"!:"+position+")";
+    }
+  };
+	this.draw = function(xpos, ypos, svgel, note) {
+    this.tType = curTabType;
+    var el = svgLine(svgel, xpos+this.dx(), ypos+this.dy(), xpos+this.dx(), 
+      ypos+this.dy()+3*ld/5-1, "extra fingering thumb", false);
+    // if (curTabType == "Italian") {
+    //   var el = svgLine(svgel, xpos+(3*ld/10), ypos+(2*ld/5), xpos+(3*ld/10), ypos+ld-1,
+    //     "fingering thumb", false);
+    // } else {
+    //   var el = svgLine(svgel, xpos+(3*ld/10), ypos+(4*ld/5), xpos+(4*ld/3), ypos+ld-1,
+    //     "fingering thumb", false);
+    // }
+    $(el).data("word", note);
+    return xpos+(3*ld/10)+el.getBBox().width;
+	};
+}
+
+allOrnaments = [new backfall(1,5), new forefall2(4), 
+  new bebung1(7), new martellement(3), new bebung2(7), new forefall1(7),
+  new dotFingering(1,7), new dotFingering(2,7), new dotFingering(3,7),
+  new thumbLine(7), new starTenuto(0)];
+
+// function ornamentPresent(orntype, sequence){
+//   for(var i=0; i<sequence.length; i++){
+//     if(orntype==sequence.type) return true;
+//   }
+//   return false;
+// }
+
+function selectOrnament(htmlobj, orn, current){
+  if(orn.eType=="Fingering"){
+    $(".selector.fingering "+orn.hand).parents("selected").removeClass("selected");
+    htmlobj.addClass("selected");
+  }
+}
 function firstParse(TC){
   var thing = {};
   var comments = [];
@@ -1447,6 +2514,582 @@ function BeamedChord(TC, start, finish){
 // 		}
 // 	};
 // }
+var events = [];
+var tempo = false;
+var legato_factor = 1.1;
+var playing = false;
+var thesoundfont = false;
+var leadTime = 1;
+
+function resumePlaying(){
+//  jsPlay(false, false, this.wordi+1); // FIXME: add some time
+  jsPlay(false, false, playing.wordi+1);
+}
+function pausePlaying(){
+  window.clearTimeout(this.timeout);
+  playing.timeout = false;
+  jsStop();
+}
+function follow(){
+  var doc = playing.doc;
+  var words = playing.words;
+  words[playing.wordi].DOMObj.classList.remove('playing');
+  playing.wordi++;
+  while(words.length>playing.wordi && words[playing.wordi].tType!=="Chord"){
+    playing.wordi++;
+  }
+  if(words.length>playing.wordi){
+    words[playing.wordi].DOMObj.classList.add('playing');
+    var nextInterval = 1000*(words[playing.wordi].dur/64) / (3/2*playing.tempoFactor);
+    var now = new Date().getTime();
+    var prevError = playing.interval - (now - playing.now);
+    playing.now = now;
+    nextInterval += prevError;
+    playing.interval = nextInterval;
+    playing.timeout = window.setTimeout(follow, nextInterval);
+  }
+}
+
+function Playing(){
+  this.ctx = ctx;
+  this.doc = false;
+  this.wordi = false;
+  this.timeout = false;
+  this.now = 0;
+  this.interval = 0;
+  this.tempoFactor = 1;
+  this.pause = pausePlaying;
+  this.resume = resumePlaying;
+}
+
+function getTempo(){
+  if(tempo){
+    return tempo;
+  } else if (document.getElementById('tempoSelect')){
+    return document.getElementById('tempoSelect').value;
+  } else return 1;
+}
+function getSoundfont(doc){
+  if(document.getElementById('soundSelect')){
+    return document.getElementById('soundSelect').value;
+  } else if(doc.rules && doc.rules.length && doc.rules[0].isBaroque()){
+    return "Bar_lute";
+  } else {
+    return "G_lute";
+  }
+}
+// function eventList(){
+//   events = [];
+//   var tfactor = getTempo();
+//   var curTuning = curParams.contextTuning;
+//   for(var i=0; i<TabCodeDocument.TabWords.length; i++){
+//     if(TabCodeDocument.TabWords[i].tType=="Chord"){
+//       addChord(TabCodeDocument.TabWords[i].pitches(), TabCodeDocument.TabWords[i].dur / tfactor);
+//     }
+//   }
+// }
+
+// function addChord(pitches, duration){
+//   if(pitches.length){
+//     for(var i=0; i<pitches.length; i++){
+//       events.push(MidiEvent.noteOn(pitches[i]));
+//     }
+//     for(i=0; i<pitches.length; i++){
+//       events.push(MidiEvent.noteOff(pitches[i], i ? 0 : duration));
+//     }    
+//   } else {
+//     // It's a rest
+//     var note = {pitch: 0, volume: 0};
+//     events.push(MidiEvent.noteOn(note));
+//     events.push(MidiEvent.noteOff(note, duration));
+//   }
+// }
+
+// function stopSound() {
+// 	if(stopit=document.getElementById('playing'))
+// 		stopit.parentNode.removeChild(stopit);
+// }
+
+// function playMIDI(){
+//   console.log(JSON.stringify(eventArray(TabCodeDocument)));
+//   eventList();
+//   var track = new MidiTrack({ events: events });
+// /*
+//     //  Set instrument to selected sound  --- DOESN'T WORK OF COURSE!
+//                 noteEvents.push(MidiEvent.program_change(25));
+// */
+//   var song  = MidiWriter({ tracks: [track] });
+//       // song.playinto("MIDI");
+//   // song.save_small();
+//   stopSound();
+//   song.play();
+// }
+
+// function MP3play(name) {
+// 	var needed = false;
+// 	if(!document.getElementById("mp3playing")) {
+// 		var audioElement = document.createElement('audio');
+// 		needed = true;
+// 	}
+// 	else {
+// 		var audioElement = document.getElementById("mp3playing");
+// 	}
+// 	if(audioElement.canPlayType('audio/ogg')) {
+// 		audioElement.setAttribute('src', '../midis/' + name + '_'+playcount+'.ogg');
+// 	}
+// 	else if(audioElement.canPlayType('audio/mp3')) {
+// 		audioElement.setAttribute('src', '../midis/' + name + '_'+playcount+'.mp3');
+// 	}
+// 	audioElement.setAttribute("id", "mp3playing");
+// 	audioElement.setAttribute('controls', 'true');
+// 	audioElement.setAttribute('autoplay', 'true');
+// 	audioElement.load();
+// 	audioElement.addEventListener("canplay", function() { 
+// 		audioElement.play(); 
+// 	}, false);
+// 	if(needed) {
+// 		document.body.appendChild(audioElement);
+// 	}
+// }
+
+function noteName(MIDIPitch){
+  var oct = Math.max(0, Math.floor(MIDIPitch / 12) - 1);
+  var pc = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'Bb', 'B'][MIDIPitch%12];
+  return pc+oct;
+}
+
+var src = false;
+function updateTempo(){
+  // alert(Number(document.getElementById('tempoSlider').value) / 90);
+  //if(src) src.playbackRate.value = Number(document.getElementById('tempoSlider').value) / 90;
+  if(playing && playing.timeout && isPlaying()){
+    playing.pause();
+    leadTime = 0;
+    window.setTimeout(playing.resume, 500);
+  } 
+}
+function showTempoValue(value) {
+  var out = document.getElementById('tempoReadOutvalue');
+  if(out){
+    if(!value){
+      value = document.getElementById('tempoSlider').value;
+    }
+    var dispVal = value / 2;
+    out.innerHTML = dispVal.toFixed(0);
+  }
+}
+function getTempoFactorFromPage(){
+  if(document.getElementById('tempoSlider')){
+    return Number(document.getElementById('tempoSlider').value) / 90;
+  } else if(document.getElementById('tempoSelect')) {
+    return Number(document.getElementById('tempoSelect').value);
+  } else return false;
+  
+}
+function extraDurMain(course, index, words){
+  // 
+  var dur = 0;
+  var max_extra_dur = 128;
+  for(var i=index+1; i<words.length; i++){
+    if(words[i].tType==="Chord"){
+      if(words[i].mainCourses[course]) {
+        return dur;
+      }
+      dur +=words[i].dur / 64;
+      if(dur>=max_extra_dur){
+        return max_extra_dur;
+      }
+    }
+  }
+  return dur;
+}
+function extraDurBass(course, index, words){
+  // 
+  var dur = 0;
+  var max_extra_dur = 128;
+  for(var i=index+1; i<words.length; i++){
+    if(words[i].tType==="Chord"){
+      if(words[i].bassCourses[course]) {
+        return dur;
+      }
+      dur +=words[i].dur / 64;
+      if(dur>=max_extra_dur){
+        return max_extra_dur;
+      }
+    }
+  }
+  return dur;
+}
+function bufferChord(chord, t, instrument, wordi, words){
+  var notes = chord.pitches();
+  // Tab durations in this program use 1 as the tatum (i.e. demi-semi-hemi whatever), so ...
+  var baseDur = (chord.dur / 64);
+  // And this playback stuff is realtime, so we need to use tempo too...
+  var tempoFactor = getTempoFactorFromPage() || 1;
+  var dur = baseDur / (3 / 2 * tempoFactor);
+  if(playing && !playing.timeout) {
+    playing.tempoFactor = tempoFactor;
+    playing.timeout = window.setTimeout(follow, 1000*(dur+0)); // Why not leadTime?
+    playing.interval = 1000*(dur+0);
+    chord.DOMObj.classList.add('playing');
+  }
+  for(var i=0; i<chord.mainCourses.length; i++){
+    if(chord.mainCourses[i]){
+      var pitch = chord.mainCourses[i].pitch(chord.tuning);
+      if(pitch){
+        var soundingDur = dur+(extraDurMain(i, wordi, words)/(3/2*tempoFactor));
+        src = instrument.play(noteName(pitch), t,
+                            soundingDur * legato_factor);
+      }
+    }
+  }
+  for(i=0; i<chord.bassCourses.length; i++){
+    if(chord.bassCourses[i]){
+      var pitch = chord.bassCourses[i].pitch(chord.tuning);
+      if(pitch){
+        var soundingDur = dur+(extraDurBass(i, wordi, words)/(3/2*tempoFactor));
+        src = instrument.play(noteName(pitch), t,
+                            soundingDur * legato_factor);
+      }
+    }
+  }
+  return t+dur;
+}
+var ctx = false;
+var soundfont = false;
+var instrument = false;
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+function jsPlay(start, end, starti){
+  if(ctx && ctx.close) {
+    ctx.close();
+    ctx = false;
+  }
+  ctx = new AudioContext();
+  soundfont = new Soundfont(ctx);
+  // instrument = soundfont.instrument('acoustic_guitar_nylon');
+  thesoundfont = getSoundfont(TabCodeDocument);
+  instrument = soundfont.instrument(thesoundfont+'/acoustic_grand_piano');
+  curTuning = curParams.contextTuning;
+  var words = TabCodeDocument.TabWords;
+  var now = leadTime;
+  var started = false;
+  starti = starti || 0;
+  instrument.onready(function(){
+    playing=new Playing();
+    playing.doc = TabCodeDocument;
+    playing.words = words;
+    playing.now = new Date().getTime();
+    $(".playing").each(function(){
+                         this.classList.remove('playing');
+    });
+    for(var i=starti; i<words.length; i++){
+      if(start && !started && start!==words[i]) continue;
+      started = true;
+      if(words[i].tType==="Chord"){
+        if(!playing.wordi && playing.wordi!==0) playing.wordi = i;
+        now = bufferChord(words[i], now, instrument, i, words);
+      }
+      if(end && end===words[i]) break;
+    }
+    TabCodeDocument.duration = (now-leadTime)*64;
+    $(".playback.control").toggleClass("start", false);
+    $(".playback.control").toggleClass("stop", true);  
+    playingTimeout = setTimeout(switchControls, (now+leadTime)*1000);
+  });
+}
+function resultMetadata(data){
+  var parent = DOMSpan('metadata', false, false);
+  if(data.ptitle) {
+    parent.appendChild(DOMSpan('PieceTitle', false, data.ptitle));
+    if(data.pieceAliases) parent.appendChild(DOMSpan('AlternativePieceTitle', false, 
+                                                     " ("+data.pieceAliases+")"));
+  }
+/* else {
+    if(data.pieceAliases) {
+      parent.appendChild(DOMSpan('PieceTitles', false, data.pieceAliases));
+    } else parent.appendChild(DOMSpan('sn', false,'Untitled'));
+  }
+*/
+  if(data.stitle || data.shtitle || data.shelf || data.sourceAliases){
+    parent.appendChild(document.createTextNode(" in "));
+    if(data.shtitle){
+      parent.appendChild(DOMSpan('SourceTitle', false, data.shtitle));
+    } else if(data.stitle){
+      parent.appendChild(DOMSpan('SourceTitle', false, data.stitle));
+      if(data.ssubtitle){
+        parent.appendChild(DOMSpan('SourceSubtitle', false, data.ssubtitle));
+      }
+    }
+/*
+    if(data.sourceAliases){
+      parent.appendChild(DOMSpan('AlternativeSourceTitle', false, " ["+data.sourceAliases+"]"));
+    }
+*/
+    if(data.shelf){
+      parent.appendChild(DOMSpan('Shelfmark', false, data.shelf));
+    }
+  }
+  return parent;
+}
+function resultTab(){
+  var stuff = ECOLMStuff[Number(this.id)];
+  var tc = stuff.data.Tabcode;
+  $(".searchResult").toggleClass("clicked", false);
+  $(this).parents(".searchResult").toggleClass("clicked", true);
+  var otcd = TabCodeDocument;//This is *bad*
+  var doc = new Tablature(tc, svg(650, 650), copyParams(TabCodeDocument.parameters));
+  var svgDiv = document.getElementById('resultTab');
+  $(svgDiv).show();
+  var vectors = stuff.results[1];
+  var exDur = 0;
+  var start = 0;
+  ECOLMStuff[Number(this.id)].tablature = doc;
+  for(var i=0; i<vectors.length; i++){
+    // start = vectors[i][0]/64; // I don't know why I don't need to convert this back
+    //start = vectors[i][0];
+    start = vectors[i][0]*4;// WHY??? WHY???
+    doc.selections.push(new Selection(start, start+ECOLMStuff.queryDuration, ECOLMStuff.query, vectors[i][1]));
+  }
+  if(svgDiv){
+    $(svgDiv).empty();
+    var top = svgDiv.getBoundingClientRect().top;
+    $(svgDiv).css("height", "calc(100% - "+(top+5)+"px");
+    svgDiv.appendChild(doc.SVG);
+    var oedit = editable;
+    var old = ld;
+    editable = false;
+    ld = 8;
+    var oldBreaks=breaks;
+    breaks=650;
+    doc.draw();
+    breaks=oldBreaks;
+    var matchwidth = doc.SVG.getBoundingClientRect().width;
+    var querywidth = document.getElementById('notation').getBoundingClientRect().right;
+    $(document.body).css("min-width", matchwidth+querywidth+25+"px");
+    $("#codediv").css("width", querywidth+"px");
+    $("#searchResults").css("width", "calc(100% - "+(10+matchwidth)+"px)");
+    ld = old;
+    editable = oedit;
+    TabCodeDocument = otcd;
+  }
+}
+function resultAjax(ID, domObj, resultsObj){
+  var anchor = DOMAnchor('resultAnchor', false, "(DB entry)",
+                             "http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID="+ID);
+  if(resultsObj[ID] && resultsObj[ID].data) {
+      var result = resultMetadata(resultsObj[ID].data);
+      result.id = ID;
+      domObj.appendChild(result);
+      domObj.appendChild(anchor);
+      $(result).click(resultTab);
+      return;
+  }
+  $.ajax({
+    type: 'POST',
+    async: true,
+    url: '../db.php',
+    datatype: 'json',
+    data: { lookup:   ID },
+    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+    failure: function(){
+      logger.log("Retrieval failed for ECOLMID", ID);
+    },
+    success: function(data){
+      if(!data) return;
+      if(!resultsObj[ID]) resultsObj[ID] = {};
+      resultsObj[ID].data=JSON.parse(data);
+      var result = resultMetadata(resultsObj[ID].data);
+      result.id = ID;
+      domObj.appendChild(result);
+      domObj.appendChild(anchor);
+      $(result).click(resultTab);
+    }
+  });
+}
+function jsStop(){
+  if(ctx) ctx.close();
+  $(".playback.control").toggleClass("start", true);
+  $(".playback.control").toggleClass("stop", false);
+  if(playingTimeout){
+    window.clearTimeout(playingTimeout);
+    playingTimeout = false;    
+  }
+  if(playing && playing.timeout){
+    window.clearTimeout(playing.timeout);
+    playing.timeout = false;
+  }
+  ctx = false;
+}
+function switchControls(){
+  $(".playback.control").toggleClass("start", true);
+  $(".playback.control").toggleClass("stop", false);
+  jsStop();
+}
+function resultDiagram(result){
+  // Result is of the form index, hit count, vector list
+  var id = result[0];
+  var ribbon = DOMDiv('result-ribbon',  'result-ribbon-'+id, false);
+  var pieceArray = corpusVectors.find(function(x){return x[0]==id;});
+  var pieceDur = pieceArray[2];
+  var vectors = result[2];
+  var queryDur = (TabCodeDocument.duration / 4) / pieceDur;
+  for(var i=0; i<vectors.length; i++){
+    var match = DOMDiv('result-block t'+vectors[i][0]+' p'+vectors[i][1]+' n'+i, 'result-block', false);
+    var prop = Math.min(vectors[i][0]/pieceDur, 1);
+    ribbon.appendChild(match);
+    $(match).css('left', Math.floor(prop*100)+'%');
+    $(match).css('width', Math.max(1, Math.floor(queryDur*100))+'%');
+  }
+  return ribbon;
+}
+function summariseResult(result){
+  // Result is of the form index, hit count, vector list. For now, let's just list vectors.
+  var vectors = result[2];
+//  var intervals = ["a semitone", "a tone", "a minor third", "a third", "a fourth", "a tritone",
+//                  "a fifth", "a minor sixth", "a sixth", "a minor seventh", "a seventh"];
+  var intervals = ["s-tone", "tone", "min 3rd", "3rd", "4th", "aug 4th",
+                  "5th", "min 6th", "6th", "min 7th", "7th"];
+  var out = [];
+  var id = result[0];
+  var pieceArray = corpusVectors.find(function(x){return x[0]==id});
+  var queryDur = TabCodeDocument.duration;
+//  var targetNotes = corpusVectors[id][1].length;
+//  var targetDur = (corpusVectors[id][1][targetNotes-1][0]);
+  var targetNotes = pieceArray[1].length;
+  var targetDur = pieceArray[2];
+  for(var i=0; i<vectors.length; i++){
+    var str = "";
+    if(vectors[i][0]!=0){
+   
+//      str+= vectors[i][0]/32+" crotchets in";
+//      str+= Math.round(100*(vectors[i][0]/targetDur))+"% ";
+      str+= "[ID "+id+"] durations: "+(vectors[i][0])+"/"+(targetDur-(queryDur / 4))+" ("+Math.round(100*(vectors[i][0]/(targetDur-(queryDur / 4))))+"%)";
+ //     str += targetDur+" Query is " + queryDur/4 + " ticks long";
+    }
+    if(vectors[i][1]>0){
+      str+=(str.length ? ", " : "")+"up "+intervals[(vectors[i][1] % 12)-1];
+    } else if (vectors[i][1]<0){
+      str+=(str.length ? ", " : "")+"down "+intervals[(Math.abs(vectors[i][1] % 12))-1];
+    }
+    if(str.length) out.push(str);
+  }
+  return out.length ? "("+out.join("; ")+")" : "";
+}
+function resultOut(num, result, max){
+	var num;
+//  return DOMSpan('resultStats', false, (num+1) + ") "+ Math.round(100*(result[1]/max))+"% "
+//                +summariseResult(result));
+//  return DOMSpan('resultStats', false, (num+1) + ") " + summariseResult(result));
+  var span = DOMSpan('resultStats', false, (num+1) + ") " + summariseResult(result));
+  span.appendChild(resultDiagram(result));
+  return span;
+}
+var ECOLMStuff = {};
+function corpusSearch(cutOff){
+  if(TabCodeDocument){
+    if(!corpusVectors.length) {
+      getCorpus();
+      window.setTimeout(corpusSearch, 1000, cutOff);
+      return;
+    }
+    tcHide(); // make some screen space
+    var needle = vectorizeTabCodeObject(TabCodeDocument, curParams.contextTuning);
+    ECOLMStuff.query = needle;
+    if(!cutOff) cutOff=Math.round(needle.length/2);
+    cutOff = needle.length;
+    ECOLMStuff.queryDuration = TabCodeDocument.duration;
+    var results = searchCorpusWithIDs(needle, corpusVectors, cutOff);
+    if(!results.length){
+      console.log('no results');
+      return;
+    }
+    var div = document.getElementById('searchResults');
+    $(div).empty();
+    $(div).show();
+    var top = div.getBoundingClientRect().top;
+    $(div).css("height", "calc(100% - "+(10+top)+"px");
+    for(var i=0; i<results.length; i++){
+      var sr = DOMDiv('searchResult', false, resultOut(i, results[i], needle.length));
+      if(!ECOLMStuff[results[i][0]]) ECOLMStuff[results[i][0]] = {};
+      ECOLMStuff[results[i][0]].results = [results[i][1], results[i][2]];
+      resultAjax(results[i][0], sr, ECOLMStuff);
+      div.appendChild(sr);
+    }
+  }
+}
+function Selection(start, finish, query, transposition){
+  this.start = start;
+  this.finish = finish;
+  this.query = query;
+  this.transposition = transposition;
+  this.chords = [];
+  this.notes = [];
+  this.translatedQuery = {};
+  this.doc = TabCodeDocument;
+  for(var i=0; i<this.query.length; i++){
+    if(this.translatedQuery[this.query[i][0]*4+this.start]){
+      this.translatedQuery[this.query[i][0]*4+this.start][this.query[i][1]+this.transposition] =true;
+    } else {
+      this.translatedQuery[this.query[i][0]*4+this.start]={};
+      this.translatedQuery[this.query[i][0]*4+this.start][this.query[i][1]+this.transposition] =true;
+    }
+  };
+  this.appliesToTime = function(time){
+    return time>=this.start && time<this.finish;
+  };
+  this.appliesToNote = function(note, chord){
+    var pitch = note.pitch(chord.tuning);
+    if(this.translatedQuery[chord.startTime] && this.translatedQuery[chord.startTime][pitch]) {
+      return true;
+    } else { 
+      return false;
+    }
+  };
+  this.play = function(){
+    var otcd = TabCodeDocument;
+    TabCodeDocument = this.doc;
+    jsPlay(this.chords[0], this.chords[this.chords.length -1]);
+    TabCodeDocument = otcd;
+  };
+}
+function playSelection(){
+  var word = $(this).data("word");
+  word.selections[0].play();
+}
+function playDoc(doc){
+  var otcd = TabCodeDocument;
+  TabCodeDocument = doc;
+  jsPlay();
+  TabCodeDocument = otcd;  
+}
+function playOrStop(){
+  if(isPlaying()){
+    jsStop();
+  } else {
+    playDoc($(this).data("doc"));
+  }
+}
+var playingTimeout = false;
+function isPlaying(){
+  return playingTimeout;
+}
+function playOrResume(){
+  if(playing && playing.wordi<playing.doc.TabWords.length){
+    playing.resume();
+  } else {
+    jsPlay();
+  }
+}
+function stopOrPause(){
+  if(playing && playing.timeout){
+    playing.pause();
+  } else if(playing && playing.wordi){
+    TabCodeDocument.TabWords[playing.wordi].DOMObj.classList.remove('playing');
+    playing.wordi = 0;
+  } else {
+    jsStop();
+  }
+}
 function prevxpos(word){
   if(word.prev){
     if(typeof(word.prev.xpos)=="undefined" && word.prev.prev){
@@ -2960,3 +4603,343 @@ function browse(vars){
   return p;
 }
 
+//var curParams;
+var UITuning = 0;
+var UIFont = "Varietie";
+var stashed = false;
+var TO = false;
+var corpusVectors = false;
+editable = window.location.search.indexOf("readonly=1")==-1;
+locPrefix = "../";
+
+function refreshFromTabCode(){
+  if(TO) clearTimeout(TO);
+  // TO = setTimeout(function(){parseTCDoc($("#code")[0].value);}, 250);
+  TO = setTimeout(function(){refresh2();}, 250);
+}
+function refresh2(){
+  curBeams = 0;
+  var newTC = new Tablature($("#code")[0].value, TabCodeDocument.SVG, curParams);
+  var newdiff = new NW(TabCodeDocument.TabWords, newTC.TabWords);
+  if(newdiff.setCosts()>0){
+    TabCodeDocument = newTC;
+    TabCodeDocument.draw();
+    if(editable) updatePage();
+  } else {
+    TO = setTimeout(function(){parseTCDoc($("#code")[0].value);}, 1000);
+  }
+}
+function nextFont(){
+  return UIFont == "Varietie" ? "Tabfont" : "Varietie";
+}
+function defaultFont(){
+  if(curParams.tabType == "Italian"){
+    document.getElementById("switchTabFont").disabled = true;
+    return "Italian";
+  } else {
+    document.getElementById("switchTabFont").disabled = false;
+    return UITuning < 3 ? "Varietie" : "Tabfont";
+  }
+}
+
+function toggleTabType(field){
+  curParams.tabType = curParams.tabType == "Italian" ? "French" : "Italian";
+  field.innerHTML = "Type: "+curParams.tabType;
+  UIFont = defaultFont();
+  document.getElementById("switchTabFont").innerHTML = "Font: "+UIFont;
+  refresh();
+}
+
+function toggleFont(field){
+  UIFont = nextFont();
+  field.innerHTML = "Font: "+UIFont;
+  curParams.fontName = UIFont;
+  refresh();
+}
+
+function rotateTuning(field){
+  UITuning = (UITuning+1) % tunings.length;
+  curParams.contextTuning = tunings[UITuning][1];
+  document.getElementById("switchTuning").innerHTML = tunings[UITuning][0];
+  refresh();
+}
+function getCorpus(){
+  $.ajax({
+   type: 'POST',
+   async: true,
+   url: 'siamese/complete-ecolm.json',
+   datatype: 'json',
+   timeout: 5000,
+   contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+   failure: function(){
+     logger.log("Retrieval failed for JSON-data", ID);
+   },
+   success: function(data){
+     corpusVectors = data;
+   }
+  });
+}
+
+function initialiseTestPage(example){
+  // FIXME: This is just for now...
+  getCorpus();
+  breaks = true;
+  breakOptions = ["System", "Page"];
+  if(window.location.search.indexOf('diff')==-1){
+    $(document.getElementById('stash')).hide();
+    $(document.getElementById('compare')).hide();    
+  }
+  $(document.getElementById('tcspan')).hide();
+  $(document.getElementById('pchange')).hide();
+  $(document.getElementById('hideprevbutton')).hide();
+  $(document.getElementById('browse')).hide();
+  curParams = new Parameters();
+  curUser = new offlineUser();
+  // tempo slider stuff from  http://loopj.com/jquery-simple-slider/
+ 	$("[data-slider]").each(function () {
+                            var input = $(this);
+ 		                        $("<span>").addClass("output")
+ 			                        .insertAfter($(this));
+ 		                      })
+ 	                  .bind("slider:ready slider:changed", 
+                          function (event, data) {
+ 		                          $(this).nextAll(".output:first")
+ 			                               .html(data.value.toFixed(1));
+ 		                      }); 
+  showTempoValue();
+}
+
+function copyParams(params){
+  return new Parameters(params.imageURL, params.tabcode, params.contextDur, 
+    params.contextTuning, params.tabType, params.fontName, params.history);
+}
+function stash(){
+  if(TabCodeDocument) 
+    stashed = new Tablature(TabCodeDocument.code, svg(1000,1000), copyParams(TabCodeDocument.parameters));
+}
+function compare(){
+  if(stashed){
+    var diff = new NW(stashed.TabWords, TabCodeDocument.TabWords);
+    alert(diff.HumanReadableDiff());
+  }
+}
+
+///////////////////
+// 
+// In this file, the basics for managing multiple extracts
+//
+function offlineUser(){
+  this.assignments = [{imageURL: false, 
+    tabcode: " ", contextDur: "Q", contextTuning: ren_G,
+    tabType: "Italian", fontName: "Varietie", history: false,
+    id: false, num: false, allocated: false, submitted: false,
+    edited: false, message: false, messageType: false,
+    state: 0}];
+  this.getDBAssignments = function(){
+    edit(this.assignments[0]);
+  };
+  this.refreshAssignments = function (){
+    this.getDBAssignments();
+  };
+  this.getAssignmentById = function(id){
+    //
+  };
+  this.dbSynchronise = function(doc, submit){
+    //
+  };
+  this.commitMessage = function(id, types, message){
+    //
+  };
+  this.changePwd=function(){
+    //
+  };
+  this.nextAssignmentFn = function(backn){
+    //
+  };
+  this.prevAssignmentFn = function(forwardn){
+    //
+  };
+  this.latest = function(){
+    //
+  };
+  this.earliest = function(){
+    //
+  };
+  this.refreshAssignments();
+}
+// Attempt at Needleman-Wunsch for two tabcode objects
+
+function filter(seq){
+  //strip comments
+  var newseq = [];
+  for(var i=0; i<seq.length; i++){
+    if(seq[i].tType!=="Comment" && seq[i].tType!=="ruleset") newseq.push(seq[i]);
+  }
+  return newseq;
+}
+function describeWord(word){
+  if(word.tType =="Chord"){
+    return describeChord(word);
+  } else {
+    return word.tType;
+  }
+}
+function describeChord(chord){
+  var description = "";
+  description += chord.flag;
+  if(chord.beamed){
+    var b = new Array(chord.lbeams+1);
+    description+=b.join("]");
+    b = new Array(chord.rbeams+1);
+    description+=b.join("[");
+  }
+  if(chord.dotted) description += ".";
+  for(var i=0; i<chord.mainCourses.length; i++){
+    if(chord.mainCourses[i]){
+      description += chord.mainCourses[i].fret+(i+1);
+    }
+  }
+  return description;
+}
+function dist(w1, w2){
+  if(w1.tType!==w2.tType) return 1;
+  switch (w1.tType){
+    case "SystemBreak":
+    case "PageBreak":
+    case "PieceBreak":
+    case "Barline":
+      // ignore differences in detail
+      return 0;
+    case "Meter":
+      return meterDiff(w1, w2);
+    case "Chord":
+      return chordDiff(w1, w2);
+    default:
+      alert(w1.tType);
+      return 0;
+  }
+}
+
+function meterDiff(m1, m2){
+  // FIXME: for now
+  return this.code===this.code ? 0 : 1;
+}
+function chordDiff(m1, m2){
+  var cost = 0;
+  var max = 0;
+  if(m1.flag || m2.flag){
+    max++;
+    if(m1.flag!==m2.flag) cost++;
+  }
+  if(m1.dotted || m2.dotted){
+    max++;
+  }
+  if(m1.beamed || m2.beamed){
+    max++;
+    if(m1.beamed!==m2.beamed) cost++;
+  }
+  for(var i=0; i<m1.mainCourses.length; i++){
+    if(m1.mainCourses[i] || m2.mainCourses[i]){
+      max++;
+      if(!m1.mainCourses[i] || !m2.mainCourses[i]){
+        cost++;
+      } else {
+        if(m1.mainCourses[i].fret!==m2.mainCourses[i].fret) cost++;
+      }
+    }
+  }
+  for(i=0; i<m1.bassCourses.length; i++){
+    if(m1.bassCourses[i] || m2.bassCourses[i]){
+      max++;
+      if(!m1.bassCourses[i] || !m2.bassCourses[i]){
+        cost++;
+      } else {
+        if(m1.bassCourses[i].fret!==m2.bassCourses[i].fret) cost++;
+      }
+    }
+  }
+  return cost/max;
+}
+
+function NW (seq1, seq2){
+  this.s1 = filter(seq1);
+  this.s2 = filter(seq2);
+  this.a=false;
+  this.from = false;
+  this.diff = false;
+  this.setCosts = function (){
+    var subst, del, ins, min, subdist;
+    if(!this.s1.length || !this.s2.length) {
+      // This is non-music in at least one example
+      if(!this.s1.length || !this.s2.length){
+        return 0;
+      } else {
+        return Math.max(this.s1.length, this.s2.length);
+      }
+    } 
+    this.a=new Array(this.s1.length);
+    this.from=new Array(this.s1.length);
+    for(var i=0; i<this.s1.length; i++){
+      this.a[i] = new Array(this.s2.length);
+      this.from[i]=new Array(this.s2.length);
+      min = 100;
+      for(var j=0; j<this.s2.length; j++){
+        if(!i) {
+          this.a[i][j]=j;
+          this.from[i][j] = j ? "deletion" : false;
+        } else if(!j) {
+          this.a[i][j]=i;
+          this.from[i][j] = "insertion";
+        } else {
+          subdist = dist(this.s1[i], this.s2[j]);
+          subst = this.a[i-1][j-1]+subdist;
+          del = this.a[i-1][j]+1;
+          ins = this.a[i][j-1]+1;
+          min = Math.min(subst, del, ins);
+          this.a[i][j] = min;
+          this.from[i][j] = (subst == min ? (subdist ? "substitution" : "same") : (ins == min ? "deletion" : "insertion"));
+        }
+      }
+    }
+    return this.a[this.s1.length-1][this.s2.length-1];
+  };
+  this.operations = function(){
+    var i=this.s1.length-1;
+    var j=this.s2.length-1;
+    if(!this.a) this.setCosts();
+    this.diff = [];
+    while(i || j){
+      this.diff.push([this.from[i][j], this.s1[i], this.s2[j]]);
+      if(this.from[i][j]==="deletion"){
+        j--;
+      } else if(this.from[i][j]==="insertion"){
+        i--;
+      } else {
+        j--;
+        i--;
+      }
+    }
+    this.diff.reverse();
+    return this.diff;
+  };
+  this.HumanReadableDiff = function(){
+    var description = [];
+    if(!this.diff) this.operations();
+    for(var i=0; i<this.diff.length; i++){
+      if(this.diff[i][0]!=="same"){
+        description.push([i, this.diff[i][0], 
+          describeWord(this.diff[i][1]), describeWord(this.diff[i][2])]);
+      }
+    }
+    return description;
+  };
+}
+
+ // SystemBreak
+ // PageBreak
+ // Comment
+ // Chord
+ // TabNote
+ // bassNote
+ // Barline
+ // Meter
