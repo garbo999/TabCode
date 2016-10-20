@@ -20,6 +20,8 @@
   </script>
 </head>
 
+<!-- <body onload="javascript:initialiseTestPage(true);">
+ -->
 <body>
   <div id="main">
     <h1>Simple TabCode example 3</h1>
@@ -39,6 +41,10 @@
 
 <script type="text/javascript">
 
+  // Initialise
+  console.log("breaks=" + breaks);
+  breaks = true;
+  
   // Tabcode database: The data is loaded from a .js file.
   // There are three versions of the same file: TINY, SMALL and LARGE.
   // TINY is big enough for experimentation (= 10 Tabcodes).
