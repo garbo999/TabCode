@@ -8,7 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/render.css" />
   <script type="text/javascript" src="js/jquery-1.4.4.js"></script>
   <script type="text/javascript" src="js/tabcode.js"></script>
-  <script type="text/javascript" src="js/tabcode_database_TINY.js"></script>
+  <script type="text/javascript" src="js/tabcode_database_SMALL.js"></script>
   <script type="text/javascript">
     /**
      * Returns a random integer between min (inclusive) and max (inclusive)
@@ -20,46 +20,38 @@
   </script>
 </head>
 
-<!-- <body onload="javascript:initialiseTestPage(true);">
- -->
 <body>
   <div id="main">
     <h1>Simple TabCode example 3</h1>
-      <div id="editor">
-        <div id="rendered" class="notation">
-<!--           <svg class="rendered" id="notation" width="900px" height="200px"></svg>
- -->
-          <svg id='notation'>    
-        </div>
-      </div>
-
-<!--     <p>Static TabCode (randomly selected from database of Tabcodes)</p>
-    <svg class="rendered" id="notation" width="900px" height="180px"></svg>
-    <p>(a random Tabcode from some composer)</p>
- -->  </div>
+    <div id="rendered" class="notation">
+      <p>Static TabCode (example <span id="tc-number"></span> randomly selected from database of Tabcodes)</p>
+      <p>Refresh page to see another example.</p>
+      <svg id="notation">    
+    </div>
+  </div>
 </body>
 
 <script type="text/javascript">
 
   // Initialise
-  console.log("breaks=" + breaks);
+  //console.log("breaks=" + breaks);
   breaks = true;
   
   // Tabcode database: The data is loaded from a .js file.
   // There are three versions of the same file: TINY, SMALL and LARGE.
   // TINY is big enough for experimentation (= 10 Tabcodes).
   // SMALL has 100 Tabcodes and LARGE has > 1600 Tabcodes.
-  // Ideally we might want to save the data as a pure .json file,
+  // It might be better to save the data as a pure .json file,
   // but this causes a problem with Chrome because Chrome does not allow loading of such a file  
-  // from the local machine for security reasons.
-  // A more realistic (but complicated) approach would be to load the data from a server using AJAX.  
+  // from the local machine (for security reasons).
+  // A better (but more complicated) approach would be to load the data from a server using AJAX.  
   
   // Parse JSON object with short tabcode database
   var tabcode_obj = JSON.parse(tabcode_data);
   var tabcode_obj_length = tabcode_obj.length;
   var random_tabcode_index = getRandomInt(0, tabcode_obj_length - 1); 
   
-  console.log("tabcode_obj_length=" + tabcode_obj_length + ", random_tabcode_index=" + random_tabcode_index);
+  // console.log("tabcode_obj_length=" + tabcode_obj_length + ", random_tabcode_index=" + random_tabcode_index);
 
   // Define tablature in TabCode
   var my_tabcode_tablature = tabcode_obj[random_tabcode_index]["tabcode"];
@@ -77,6 +69,10 @@
   // Create and draw the SVG image
   tabcode_doc = new Tablature(my_tabcode_tablature, svg_element, params);
   tabcode_doc.draw();
+
+  // Indicate which Tabcode was randomly selected
+  var example_no = random_tabcode_index + 1;
+  document.getElementById("tc-number").innerHTML =  example_no + " of " + tabcode_obj_length; 
 </script>
 
 </html>

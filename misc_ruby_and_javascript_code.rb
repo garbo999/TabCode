@@ -55,3 +55,10 @@ obj[0]["tabcode"]
 #False means display everything on one system, True means apply all explicit breaks, 
 #and I think a width in pixels may trigger automatic system breaking 
 #(if I got around to implementing that).
+
+# Tabcode example 45 of 100 is short
+
+# bash shell
+# append to start and end of large json file
+sed -i '1i tabcode_data = ' tabcode_database_LARGE.js
+echo ";" >> tabcode_database_LARGE.js
