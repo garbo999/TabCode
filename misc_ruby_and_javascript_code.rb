@@ -47,3 +47,11 @@ var tab_db = "...json string.."
 var obj = JSON.parse(tab_db);
 obj.length # = 10
 obj[0]["tabcode"]
+
+#Note from David Lewis about "breaks" variable:
+#It might be the 'breaks' variable. It's set up with the expectation of indicating different ways 
+#of 'justifying' the music, but also, for the OCR correction interface, of only showing a single system. 
+#If breaks="stop" (in base.js), I think it will stop rendering at the first break. 
+#False means display everything on one system, True means apply all explicit breaks, 
+#and I think a width in pixels may trigger automatic system breaking 
+#(if I got around to implementing that).
