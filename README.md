@@ -6,22 +6,22 @@ Display lute or historical guitar tablature in a webpage.
 ## What is TabCode?
 TabCode is a convenient way to notate historical tablature in a computer. It was created by Tim Crawford in the 1990s. There is a basic description [here]. More details are given [on this page][Reference text 4] (note the useful references on the left under 'TabCode'). TabCode has been further developed as part of the [ECOLM] project.
 
-## What does it look like?
+## What does TabCode look like?
 
-For security reasons, Github doesn't allow the files in this package to run directly from the Github page. You need to download the package to your computer to run it.
+Click [here][Reference text 5] to open a page like Example 3. Refresh that page to see a different TabCode (randomly selected).
 
-However: I was able to set up [another page here][Reference text 5] that resembles Example 3. Refresh that page to see a different TabCode (randomly selected).
+Note: For security reasons, Github doesn't allow the files in this package to run directly from the Github site. You need to download the package to your computer to run it.
 
-## How to try the code on your computer (simple way)
+## How to try TabCode on your computer (simple way)
 
 Download one of the compressed packages (ZIP or TAR format) and save the files somewhere on your computer. You should then be able to open the example files (e.g. TabCode_EXAMPLE_1.html) directly with your browser.
 
 * [TabCode in ZIP format][Reference text 1]
 * [TabCode in TAR format][Reference text 2]
 
-If you have a basic understanding of HTML (and are willing to copy and paste some Javacript), you can integrate TabCode into your own website. 
+If you have a basic understanding of HTML (and are willing to copy and paste some Javacript), you can then integrate TabCode into your own website. 
 
-## How to try the code on your computer (advanced)
+## How to try TabCode on your computer (advanced)
 
 Use a Git client to pull the code to your machine.
 
@@ -76,7 +76,7 @@ Note: If you want to save the TabCode you create, you need to copy the data to a
 
 ## The 3rd example file: `TabCode_EXAMPLE_3.html`
 
-This file randomly selects one TabCode from a database and displays it. Refresh the page to see another TabCode.
+This file randomly selects one TabCode from a database and displays it. Refresh the page to see another TabCode. You can try out [this page here][Reference text 5].
 
 ## Support (installation questions, bug reports, etc.)
 
