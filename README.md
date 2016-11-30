@@ -64,9 +64,13 @@ Finally, a script runs to display the TabCode in the SVG element:
 
 ## The 2nd example file: `TabCode_EXAMPLE_2.html`
 
-This file contains an editor that can be used to manually enter tablature and edit it directly on the staff. 
+CAUTION: The editor example does NOT work yet!
 
-Note: If you want to save the TabCode you create, you need to copy the data to a file.
+This file contains an editor that can be used to manually enter tablature and edit it directly on the staff.
+
+For a reference to the editor, see [here][Reference text 6].
+
+Note: If you want to save the TabCode you create, you need to copy the data to a file. This limitation exists in Javascript for security reasons.
 
 ## The 3rd example file: `TabCode_EXAMPLE_3.html`
 
@@ -85,8 +89,8 @@ Thanks to Tim Crawford, David Lewis and Richard Lewis at Goldsmiths College, Uni
 [Reference text 1]: https://github.com/garbo999/TabCode/zipball/master
 [Reference text 2]: https://github.com/garbo999/TabCode/tarball/master
 [Reference text 3]: https://github.com/garbo999/TabCode/issues
-[here]: http://www.doc.gold.ac.uk/~mas01tc/web/ttc/TabCode.html
-[ECOLM]: http://www.ecolm.org/
 [Reference text 4]: http://doc.gold.ac.uk/isms/ecolm/?page=TabCode
 [Reference text 5]: https://garbo999.github.io/TabCode/
-
+[Reference text 6]: https://rvw.doc.gold.ac.uk/ecolmeditor/help/
+[here]: http://www.doc.gold.ac.uk/~mas01tc/web/ttc/TabCode.html
+[ECOLM]: http://www.ecolm.org/
