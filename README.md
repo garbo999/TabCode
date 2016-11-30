@@ -78,6 +78,13 @@ Note: If you want to save the TabCode you create, you need to copy the data to a
 
 This file randomly selects one TabCode from a database and displays it. Refresh the page to see another TabCode. You can try out [this page here][Reference text 5].
 
+## More TabCode examples (e.g. baroque lute tablature)
+
+On these pages, click the TabCode button at the bottom to see the code.
+
+* [Weiss example 1][http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=320&TextID=1326]
+* [Weiss example 2][http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=411&TextID=1416]
+
 ## Support (installation questions, bug reports, etc.)
 
 Use the Issues page provided by Github for questions and bug reports: 
