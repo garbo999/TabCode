@@ -5,18 +5,27 @@ Display lute or historical guitar tablature in a webpage.
 
 ## How to try the code (simple)
 
-Download one of the compressed packages (ZIP or TAR format) and save the files somewhere on your computer. You should then be able to open the example files (e.g. ) directly with your browser.
+Download one of the compressed packages (ZIP or TAR format) and save the files somewhere on your computer. You should then be able to open the example files (e.g. TabCode_EXAMPLE_1.html) directly with your browser.
 
 * [TabCode in ZIP format][Reference text 1]
 * [TabCode in TAR format][Reference text 2]
 
-If you have a basic understanding of HTML (and are willing to copy and paste some Javacript), you should be able to integrate TabCode into your own website. 
-
-The solution: Download the code for this project and try out the example files. You need to understand how HTML works (and some basic understanding of Javascript won't hurt), but it should be possible to display tablature by just copying and pasting the example files.
+If you have a basic understanding of HTML (and are willing to copy and paste some Javacript), you can integrate TabCode into your own website. 
 
 ## How to try the code (advanced)
 
 Use a Git client to fork the code to your machine.
+
+## The 1st example file: `TabCode_EXAMPLE_1.html`
+
+This is the smallest possible example. We load the necessary CSS and Javascript files in the head of the file:
+
+```html
+<link type="text/css" rel="stylesheet" href="css/newlook.css" />
+<link type="text/css" rel="stylesheet" href="css/render.css" />
+<script type="text/javascript" src="js/jquery-1.4.4.js"></script>
+<script type="text/javascript" src="js/tabcode.js"></script>
+```
 
 ## Installation questions, bug reports, etc.
 
