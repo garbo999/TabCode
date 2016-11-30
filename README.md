@@ -12,16 +12,16 @@ Click [here][Reference text 5] to open a page like Example 3. Refresh that page 
 
 Note: For security reasons, Github doesn't allow the files in this package to run directly from the Github site. You need to download the package to your computer to run it.
 
-## How to try TabCode on your computer (simple way)
+## How to try TabCode on your computer (SIMPLE)
 
 Download one of the compressed packages (ZIP or TAR format) and save the files somewhere on your computer. You should then be able to open the example files (e.g. TabCode_EXAMPLE_1.html) directly with your browser.
 
 * [TabCode in ZIP format][Reference text 1]
 * [TabCode in TAR format][Reference text 2]
 
-If you have a basic understanding of HTML (and are willing to copy and paste some Javacript), you can then integrate TabCode into your own website. 
+If you have a basic understanding of HTML (and are willing to copy and paste some Javacript), you can modify the examples to integrate TabCode into your own website. 
 
-## How to try TabCode on your computer (advanced)
+## How to try TabCode on your computer (ADVANCED)
 
 Use a Git client to pull the code to your machine.
 
