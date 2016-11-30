@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>Simple TabCode example 3 (modified for Github Pages)</title>
+  <link type="text/css" rel="stylesheet" href="https://rawgit.com/garbo999/TabCode/master/css/newlook.css" />
+  <link type="text/css" rel="stylesheet" href="https://rawgit.com/garbo999/TabCode/master/css/render.css" />
+  <script type="text/javascript" src="https://rawgit.com/garbo999/TabCode/master/js/jquery-1.4.4.js"></script>
+  <script type="text/javascript" src="https://rawgit.com/garbo999/TabCode/master/js/tabcode.js"></script>
+  <script type="text/javascript" src="https://rawgit.com/garbo999/TabCode/master/js/tabcode_database_SMALL.js"></script>
+  <script type="text/javascript">
+    /**
+     * Returns a random integer between min (inclusive) and max (inclusive)
+     * Using Math.round() will give you a non-uniform distribution!
+     */
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }  
+  </script>
+</head>
+
+<body>
+  <div id="main">
+    <h1>Simple TabCode example 3</h1>
+    <div id="rendered" class="notation">
+      <p>Static TabCode (example <span id="tc-number"></span> was randomly selected from the database of Tabcodes)</p>
+      <p>Refresh page to see another example.</p>
+      <svg id="notation"></svg>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript">
+
+  // Initialise
+  breaks = true;
+  
+  // Tabcode database: The data is loaded from a .js file.
+  // There are three versions of the database file: 
+  //    TINY --> 'tabcode_database_TINY.js'
+  //    SMALL --> 'tabcode_database_SMALL.js'
+  //    LARGE --> 'tabcode_database_LARGE.js'
+  // TINY is big enough for experimentation (= 10 Tabcodes).
+  // SMALL has 100 Tabcodes and LARGE has > 1600 Tabcodes.
+  // The SMALL file is currently loaded in the 'head' section of this page.
+  // Note: It might be better to save the data as a pure .json file,
+  // but this causes a problem with Chrome browser because Chrome by default 
+  // does not allow loading of a .json file from the local machine (for security reasons).
+  // A better (but more complicated) approach would be to load the data from a remote server 
+  // with AJAX.  
+
+  // Parse JSON object with short tabcode database
+  var tabcode_obj = JSON.parse(tabcode_data);
+  var tabcode_obj_length = tabcode_obj.length;
+  var random_tabcode_index = getRandomInt(0, tabcode_obj_length - 1); 
+  
+  // Define tablature in TabCode
+  var my_tabcode_tablature = tabcode_obj[random_tabcode_index]["tabcode"];
+
+  // Initialise variables
+  var svg_element = document.getElementById('notation');
+  var tc; 
+  var hist = new History(); 
+
+  // Parameters (including two possible alternatives with different fonts)
+  var params = new Parameters(false, tc, 'Q', ren_G, 'French', 'Varietie', hist);
+  //var params = new Parameters(false, tc, 'Q', ren_G, 'French', 'Tabfont', hist);
+  //var params = new Parameters(false, tc, 'Q', ren_G, 'Italian', 'Italian', hist);
+
+  // Create and draw the SVG image
+  tabcode_doc = new Tablature(my_tabcode_tablature, svg_element, params);
+  tabcode_doc.draw();
+
+  // Indicate which Tabcode was randomly selected
+  var example_no = random_tabcode_index + 1;
+  document.getElementById("tc-number").innerHTML =  example_no + " of " + tabcode_obj_length; 
+
+</script>
+
+</html>

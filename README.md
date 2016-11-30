@@ -4,9 +4,13 @@
 Display lute or historical guitar tablature in a webpage.
 
 ## What is TabCode?
-TabCode is a convenient way to notate historical tablature in a computer. It was created by Tim Crawford in the 1990s. There is a basic description [here]. More details are given [on this page][Reference text 4]. TabCode has been further developed as part of the [ECOLM] project.
+TabCode is a convenient way to notate historical tablature in a computer. It was created by Tim Crawford in the 1990s. There is a basic description [here]. More details are given [on this page (also note the useful references on the left under 'TabCode')][Reference text 4]. TabCode has been further developed as part of the [ECOLM] project.
 
-## How to try the code (simple)
+## What does it look like?
+
+For security reasons, Github doesn't allow the files in this package to run directly. But I was able to set up [another page here][Reference text 5] that resembles Example 3. Refresh that page to see a different TabCode (randomly selected).
+
+## How to try the code on your computer (simple way)
 
 Download one of the compressed packages (ZIP or TAR format) and save the files somewhere on your computer. You should then be able to open the example files (e.g. TabCode_EXAMPLE_1.html) directly with your browser.
 
@@ -15,7 +19,7 @@ Download one of the compressed packages (ZIP or TAR format) and save the files s
 
 If you have a basic understanding of HTML (and are willing to copy and paste some Javacript), you can integrate TabCode into your own website. 
 
-## How to try the code (advanced)
+## How to try the code on your computer (advanced)
 
 Use a Git client to pull the code to your machine.
 
@@ -84,4 +88,5 @@ Thanks to Tim Crawford, David Lewis and Richard Lewis at Goldsmiths College, Uni
 [here]: http://www.doc.gold.ac.uk/~mas01tc/web/ttc/TabCode.html
 [ECOLM]: http://www.ecolm.org/
 [Reference text 4]: http://doc.gold.ac.uk/isms/ecolm/?page=TabCode
+[Reference text 5]: https://garbo999.github.io/TabCode/
 
