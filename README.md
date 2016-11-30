@@ -82,8 +82,9 @@ This file randomly selects one TabCode from a database and displays it. Refresh 
 
 On these pages, click the TabCode button at the bottom to see the code.
 
-* [Weiss example 1: Bourée][Reference text 7]
-* [Weiss example 2: Passacaille][Reference text 8]
+* [Weiss: Bourée][Reference text 7]
+* [Weiss: Passacaille][Reference text 8]
+* [Dowland: Mr Dowlands / Midnight][Reference text 9]
 
 ## Support (installation questions, bug reports, etc.)
 
@@ -103,5 +104,6 @@ Thanks to Tim Crawford, David Lewis and Richard Lewis at Goldsmiths College, Uni
 [Reference text 6]: https://rvw.doc.gold.ac.uk/ecolmeditor/help/
 [Reference text 7]: http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=320&TextID=1326
 [Reference text 8]: http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=411&TextID=1416
+[Reference text 9]: http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=191&TextID=645
 [here]: http://www.doc.gold.ac.uk/~mas01tc/web/ttc/TabCode.html
 [ECOLM]: http://www.ecolm.org/
