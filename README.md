@@ -4,11 +4,13 @@
 Display lute or historical guitar tablature in a webpage.
 
 ## What is TabCode?
-TabCode is a convenient way to notate historical tablature in a computer. It was created by Tim Crawford in the 1990s. There is a basic description [here]. More details are given [on this page][Reference text 4] (also note the useful references on the left under 'TabCode'). TabCode has been further developed as part of the [ECOLM] project.
+TabCode is a convenient way to notate historical tablature in a computer. It was created by Tim Crawford in the 1990s. There is a basic description [here]. More details are given [on this page][Reference text 4] (note the useful references on the left under 'TabCode'). TabCode has been further developed as part of the [ECOLM] project.
 
 ## What does it look like?
 
-For security reasons, Github doesn't allow the files in this package to run directly. But I was able to set up [another page here][Reference text 5] that resembles Example 3. Refresh that page to see a different TabCode (randomly selected).
+For security reasons, Github doesn't allow the files in this package to run directly from the Github page. You need to download the package to your computer to run it.
+
+However: I was able to set up [another page here][Reference text 5] that resembles Example 3. Refresh that page to see a different TabCode (randomly selected).
 
 ## How to try the code on your computer (simple way)
 
