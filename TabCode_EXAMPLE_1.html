@@ -20,6 +20,7 @@
 </body>
 
 <script type="text/javascript">
+
   // Define tablature in TabCode
   var my_tabcode_tablature = "M(C/) \
     E.a2a3c5 Sc2 Ed2 Ea2 Ed2a3c5 Ea1 Ec2a3 Eb5 | \
@@ -28,7 +29,8 @@
   // Initialise variables
   var svg_element = document.getElementById('notation');
   var tc; 
-  var hist = new History(); 
+  var hist = new History();
+  editable = false;
 
   // Parameters (including two possible alternatives with different fonts)
   var params = new Parameters(false, tc, 'Q', ren_G, 'French', 'Varietie', hist);
