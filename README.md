@@ -96,6 +96,15 @@ Use the Issues page provided by Github for questions and bug reports:
 
 Thanks to Tim Crawford, David Lewis and Richard Lewis at Goldsmiths College, University of London for sharing the Javascript code behind TabCode and for answering my questions.
 
+License
+
+This file is part of TabCode for the Web.
+
+TabCode for the Web is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+TabCode for the Web is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with TabCode for the Web. If not, see http://www.gnu.org/licenses/.
 [Reference text 1]: https://github.com/garbo999/TabCode/zipball/master
 [Reference text 2]: https://github.com/garbo999/TabCode/tarball/master
 [Reference text 3]: https://github.com/garbo999/TabCode/issues
