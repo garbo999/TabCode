@@ -4,7 +4,7 @@
 Display lute or historical guitar tablature in a webpage.
 
 ## What is TabCode?
-TabCode is a convenient way to notate historical tablature in a computer. It was created by Tim Crawford in the 1990s. There is a basic description [here]. More details are given [on this page][Reference text 4] (note the useful references on the left under 'TabCode'). TabCode has been further developed as part of the [ECOLM] project.
+TabCode is a convenient way to notate historical tablature in a computer. It was created by Tim Crawford in the 1990s. There is a basic description [here][Reference text 10]. More details are given [on this page][Reference text 4] (note the useful references on the left under 'TabCode'). TabCode has been further developed as part of the [ECOLM][Reference text 11] project.
 
 Note: This particular version of the software is 'experimental'. It has been used extensively, but there is no guarantee that it will generate correct tablature output in every possible situation. For example, some instruments are not supported as fully as others, and the software might misbehave in certain browsers. Please report any problems on the [issues page][Reference text 3].
 
@@ -70,7 +70,7 @@ CAUTION: The editor example does NOT work yet!
 
 This file contains an editor that can be used to manually enter tablature and edit it directly on the staff.
 
-For a reference to the editor, see [here][Reference text 6].
+For a reference to the editor, see [here][Reference text 6]. ECOLM also has a [test editor][https://rvw.doc.gold.ac.uk/ecolmeditor/test/].
 
 Note: If you want to save the TabCode you create, you need to copy the data to a file. This limitation exists in Javascript for security reasons.
 
@@ -105,5 +105,5 @@ Thanks to Tim Crawford, David Lewis and Richard Lewis at Goldsmiths College, Uni
 [Reference text 7]: http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=320&TextID=1326
 [Reference text 8]: http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=411&TextID=1416
 [Reference text 9]: http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=191&TextID=645
-[here]: http://www.doc.gold.ac.uk/~mas01tc/web/ttc/TabCode.html
-[ECOLM]: http://www.ecolm.org/
+[Reference text 10]: http://www.doc.gold.ac.uk/~mas01tc/web/ttc/TabCode.html
+[Reference text 11]: http://www.ecolm.org/
