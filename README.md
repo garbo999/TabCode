@@ -70,7 +70,7 @@ CAUTION: The editor example does NOT work yet!
 
 This file contains an editor that can be used to manually enter tablature and edit it directly on the staff.
 
-For a reference to the editor, see [here][Reference text 6]. ECOLM also has a [test editor][https://rvw.doc.gold.ac.uk/ecolmeditor/test/].
+For a reference to the editor, see [here][Reference text 6]. ECOLM also has a [test editor][Reference text 12].
 
 Note: If you want to save the TabCode you create, you need to copy the data to a file. This limitation exists in Javascript for security reasons.
 
@@ -96,7 +96,7 @@ Use the Issues page provided by Github for questions and bug reports:
 
 Thanks to Tim Crawford, David Lewis and Richard Lewis at Goldsmiths College, University of London for sharing the Javascript code behind TabCode and for answering my questions.
 
-License
+## License
 
 This file is part of TabCode for the Web.
 
@@ -105,6 +105,7 @@ TabCode for the Web is free software: you can redistribute it and/or modify it u
 TabCode for the Web is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with TabCode for the Web. If not, see http://www.gnu.org/licenses/.
+
 [Reference text 1]: https://github.com/garbo999/TabCode/zipball/master
 [Reference text 2]: https://github.com/garbo999/TabCode/tarball/master
 [Reference text 3]: https://github.com/garbo999/TabCode/issues
@@ -116,3 +117,4 @@ You should have received a copy of the GNU General Public License along with Tab
 [Reference text 9]: http://doc.gold.ac.uk/isms/ecolm/database/?type=41&ID=191&TextID=645
 [Reference text 10]: http://www.doc.gold.ac.uk/~mas01tc/web/ttc/TabCode.html
 [Reference text 11]: http://www.ecolm.org/
+[Reference text 12]: https://rvw.doc.gold.ac.uk/ecolmeditor/test/
